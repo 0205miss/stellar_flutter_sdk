@@ -12,9 +12,9 @@ import 'util.dart';
 
 class Network {
   static final Network PUBLIC =
-      new Network("Public Global Stellar Network ; September 2015");
+      new Network("Pi Network");
   static final Network TESTNET =
-      new Network("Test SDF Network ; September 2015");
+      new Network("Pi Testnet");
 
   static final Network FUTURENET =
   new Network("Test SDF Future Network ; October 2022");

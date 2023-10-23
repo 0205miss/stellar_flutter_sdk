@@ -33,8 +33,8 @@ import 'requests/liquidity_pools_request_builder.dart';
 class StellarSDK {
   static const versionNumber = "1.6.5";
 
-  static final StellarSDK PUBLIC = StellarSDK("https://horizon.stellar.org");
-  static final StellarSDK TESTNET = StellarSDK("https://horizon-testnet.stellar.org");
+  static final StellarSDK PUBLIC = StellarSDK("https://api.mainnet.minepi.com");
+  static final StellarSDK TESTNET = StellarSDK("https://api.testnet.minepi.com");
   static final StellarSDK FUTURENET = StellarSDK("https://horizon-futurenet.stellar.org");
 
   late Uri _serverURI;

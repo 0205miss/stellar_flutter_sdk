@@ -67,7 +67,7 @@ class Wallet {
   }
 
   Future<KeyPair> getKeyPair({int index = 0}) async {
-    final key = this._derivePath("m/44'/148'/$index'");
+    final key = this._derivePath("m/44'/314159'/$index'");
     return KeyPair.fromSecretSeedList(key.sublist(0, 32));
   }
 
