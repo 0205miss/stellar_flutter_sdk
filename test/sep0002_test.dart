@@ -1,13 +1,15 @@
 @Timeout(const Duration(seconds: 400))
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 void main() {
   test('resolve stellar address', () async {
-    FederationResponse response = await Federation.resolveStellarAddress("bob*soneso.com");
+    FederationResponse response =
+        await Federation.resolveStellarAddress("bob*soneso.com");
     assert(response.stellarAddress == "bob*soneso.com");
-    assert(response.accountId == "GBVPKXWMAB3FIUJB6T7LF66DABKKA2ZHRHDOQZ25GBAEFZVHTBPJNOJI");
+    assert(response.accountId ==
+        "GBVPKXWMAB3FIUJB6T7LF66DABKKA2ZHRHDOQZ25GBAEFZVHTBPJNOJI");
     assert(response.memoType == "text");
     assert(response.memo == "hello memo text");
   });
@@ -20,7 +22,8 @@ void main() {
         "GBVPKXWMAB3FIUJB6T7LF66DABKKA2ZHRHDOQZ25GBAEFZVHTBPJNOJI",
         "https://stellarid.io/federation/");
     assert(response.stellarAddress == "bob*soneso.com");
-    assert(response.accountId == "GBVPKXWMAB3FIUJB6T7LF66DABKKA2ZHRHDOQZ25GBAEFZVHTBPJNOJI");
+    assert(response.accountId ==
+        "GBVPKXWMAB3FIUJB6T7LF66DABKKA2ZHRHDOQZ25GBAEFZVHTBPJNOJI");
     assert(response.memoType == "text");
     assert(response.memo == "hello memo text");
   });
@@ -32,7 +35,8 @@ void main() {
         "ae05181b239bd4a64ba2fb8086901479a0bde86f8e912150e74241fe4f5f0948",
         "https://stellarid.io/federation/");
     assert(response.stellarAddress == "bob*soneso.com");
-    assert(response.accountId == "GDD7WGDAIYQBPGQ5WE3VWOXH42YPB5H2VZNMZ3OHE45VJNP4Q6Z4ZNSZ");
+    assert(response.accountId ==
+        "GDD7WGDAIYQBPGQ5WE3VWOXH42YPB5H2VZNMZ3OHE45VJNP4Q6Z4ZNSZ");
     assert(response.memoType == "text");
     assert(response.memo == "hello memo text");
   });
@@ -40,11 +44,14 @@ void main() {
   /// TODO : fix later, server code 400
   /// ! Body: {"error": "Malformed query, parameters \"q\" and \"type\" are required."}
   test('resolve forward', () async {
-    FederationResponse response = await Federation.resolveForward(
-        {"forward_type": "bank_account", "swift": "BOPBPHMM", "acct": "2382376"},
-        "https://stellarid.io/federation/");
+    FederationResponse response = await Federation.resolveForward({
+      "forward_type": "bank_account",
+      "swift": "BOPBPHMM",
+      "acct": "2382376"
+    }, "https://stellarid.io/federation/");
     assert(response.stellarAddress == "bob*soneso.com");
-    assert(response.accountId == "GDD7WGDAIYQBPGQ5WE3VWOXH42YPB5H2VZNMZ3OHE45VJNP4Q6Z4ZNSZ");
+    assert(response.accountId ==
+        "GDD7WGDAIYQBPGQ5WE3VWOXH42YPB5H2VZNMZ3OHE45VJNP4Q6Z4ZNSZ");
     assert(response.memoType == "text");
     assert(response.memo == "hello memo text");
   });

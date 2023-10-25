@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 /// This library provides APIs to build and sign transactions, connect and query [Stellar Horizon](https://github.com/stellar/go/tree/master/services/horizon)
-library stellar_flutter_sdk;
+library pi_flutter_sdk;
 
 // Request builders
 export 'src/requests/request_builder.dart';

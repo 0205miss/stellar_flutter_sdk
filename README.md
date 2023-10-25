@@ -1,4 +1,4 @@
-# [Stellar SDK for Flutter](https://github.com/Soneso/stellar_flutter_sdk)
+# [Stellar SDK for Flutter](https://github.com/Soneso/pi_flutter_sdk)
 
 ![Dart](https://img.shields.io/badge/Dart-green.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-blue.svg)
@@ -8,18 +8,24 @@ The Soneso open source Stellar SDK for Flutter is build with Dart and provides A
 ## Installation
 
 ### From pub.dev
+
 1. Add the dependency to your pubspec.yaml file:
+
 ```
 dependencies:
-  stellar_flutter_sdk: ^1.6.5
+  pi_flutter_sdk: ^1.6.5
 ```
+
 2. Install it (command line or IDE):
+
 ```
 flutter pub get
 ```
+
 3. In your source file import the SDK, initialize and use it:
+
 ```dart
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 final StellarSDK sdk = StellarSDK.TESTNET;
 
@@ -27,7 +33,7 @@ String accountId = "GASYKQXV47TPTB6HKXWZNB6IRVPMTQ6M6B27IM5L2LYMNYBX2O53YJAL";
 AccountResponse account = await sdk.accounts.account(accountId);
 print("sequence number: ${account.sequenceNumber}");
 ```
-   
+
 ### Manual
 
 The SDK is a Flutter Dart package. Here is a step by step that we recommend:
@@ -40,16 +46,19 @@ The SDK is a Flutter Dart package. Here is a step by step that we recommend:
 Add it to your app:
 
 5. In your Flutter app add the local dependency in `pubspec.yaml` and then run `pub get`:
+
 ```code
 dependencies:
    flutter:
      sdk: flutter
-   stellar_flutter_sdk:
-     path: ../stellar_flutter_sdk
+   pi_flutter_sdk:
+     path: ../pi_flutter_sdk
 ```
+
 6. In your source file import the SDK, initialize and use it:
+
 ```dart
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 final StellarSDK sdk = StellarSDK.TESTNET;
 
@@ -63,6 +72,7 @@ print("sequence number: ${account.sequenceNumber}");
 ### 1. Create a Stellar key pair
 
 #### Random generation
+
 ```dart
 // create a completely new and unique pair of keys.
 KeyPair keyPair = KeyPair.random();
@@ -87,6 +97,7 @@ print(mnemonic);
 ```
 
 ##### Generate key pairs
+
 ```dart
 Wallet wallet = await Wallet.from("mango debris lumber vivid bar risk prosper verify photo put ridge sell range pet indoor lava sister around panther brush twice cattle sauce romance");
 
@@ -102,14 +113,18 @@ print("${keyPair1.accountId} : ${keyPair1.secretSeed}");
 Supported languages are: english, french, spanish, italian, korean, japanese, simplified chinese and traditional chinese. Find more details in our [SEP-005 examples](documentation/sdk_examples/sep-0005-key-derivation.md).
 
 ### 2. Create an account
+
 After the key pair generation, you have already got the address, but it is not activated until someone transfers at least 1 lumen into it.
 
 #### 2.1 Testnet
+
 If you want to play in the Stellar test network, the SDK can ask Friendbot to create an account for you as shown below:
+
 ```dart
 bool funded = await FriendBot.fundTestAccount(keyPair.accountId);
 print ("funded: ${funded}");
 ```
+
 #### 2.2 Public net
 
 On the other hand, if you would like to create an account in the public net, you should buy some Stellar Lumens (XLM) from an exchange. When you withdraw the Lumens into your new account, the exchange will automatically create the account for you. However, if you want to create an account from another account of your own, you may run the following code:
@@ -144,6 +159,7 @@ if (response.success) {
 ```
 
 ### 3. Check account
+
 #### 3.1 Basic info
 
 After creating the account, we may check the basic information of the account.
@@ -194,9 +210,11 @@ for (OperationResponse response in payments.records) {
   }
 }
 ```
+
 You can use:`limit`, `order`, and `cursor` to customize the query. Get the most recent payments for accounts, ledgers and transactions.
 
 Horizon has SSE support for push data. You can use it like this:
+
 ```dart
 String accountId = "GDXPJR65A6EXW7ZIWWIQPO6RKTPG3T2VWFBS3EAHJZNFW6ZXG3VWTTSK";
 
@@ -212,9 +230,10 @@ sdk.payments.forAccount(accountId).cursor("now").stream().listen((response) {
   }
 });
 ```
+
 #### 3.3 Check others
 
-Just like payments, you can check `assets`, `transactions`, `effects`, `offers`, `operations`, `ledgers` etc. 
+Just like payments, you can check `assets`, `transactions`, `effects`, `offers`, `operations`, `ledgers` etc.
 
 ```dart
 sdk.assets.
@@ -226,6 +245,7 @@ sdk.orderBook.
 sdk.trades.
 // add so on ...
 ```
+
 ### 4. Building and submitting transactions
 
 Example "send native payment":
@@ -273,36 +293,36 @@ print(response.memo);
 ## Documentation and Examples
 
 ### Examples
-| Example                                                                                                  | Description                                                                                                                                                                                                                                                                                                      | Documentation                                                                                                                                                                                                                                                                                        |
-|:---------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Create a new account](documentation/sdk_examples/create_account.md)                                     | A new account is created by another account. In the testnet we can also use Freindbot.                                                                                                                                                                                                                           | [Create account](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#create-account)                                                                                                                                                                                          |
-| [Send native payment](documentation/sdk_examples/send_native_payment.md)                                 | A sender sends 100 XLM (Stellar Lumens) native payment to a receiver.                                                                                                                                                                                                                                            | [Payments](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#payment)                                                                                                                                                                                                       |
-| [Create trustline](documentation/sdk_examples/trustline.md)                                              | An trustor account trusts an issuer account for a specific custom token. The issuer account can now send tokens to the trustor account.                                                                                                                                                                          | [Assets & Trustlines](https://www.stellar.org/developers/guides/concepts/assets.html) and [Change trust](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#change-trust)                                                                                                    |
-| [Send tokens - non native payment](documentation/sdk_examples/send_non_native_payment.md)                | Two accounts trust the same issuer account and custom token. They can now send this custom tokens to each other.                                                                                                                                                                                                 | [Assets & Trustlines](https://www.stellar.org/developers/guides/concepts/assets.html) and [Change trust](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#change-trust) and [Payments](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#payment) |
-| [Path payments](documentation/sdk_examples/path_payments.md)                                             | Two accounts trust different custom tokens. The sender wants to send token "IOM" but the receiver wants to receive token "ECO".                                                                                                                                                                                  | [Path payment strict send](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#path-payment-strict-send) and [Path payment strict receive](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#path-payment-strict-receive)                            |
-| [Merge accounts](documentation/sdk_examples/merge_account.md)                                            | Merge one account into another. The first account is removed, the second receives the funds.                                                                                                                                                                                                                     | [Account merge](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#account-merge)                                                                                                                                                                                            |
-| [Bump sequence number](documentation/sdk_examples/bump_sequence.md)                                      | In this example we will bump the sequence number of an account to a higher number.                                                                                                                                                                                                                               | [Bump sequence number](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#bump-sequence)                                                                                                                                                                                     |
-| [Manage data](documentation/sdk_examples/manage_data.md)                                                 | Sets, modifies, or deletes a data entry (name/value pair) that is attached to a particular account.                                                                                                                                                                                                              | [Manage data](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-data)                                                                                                                                                                                                |
-| [Manage buy offer](documentation/sdk_examples/manage_buy_offer.md)                                       | Creates, updates, or deletes an offer to buy one asset for another, otherwise known as a "bid" order on a traditional orderbook.                                                                                                                                                                                 | [Manage buy offer](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-buy-offer)                                                                                                                                                                                      |
-| [Manage sell offer](documentation/sdk_examples/manage_sell_offer.md)                                     | Creates, updates, or deletes an offer to sell one asset for another, otherwise known as a "ask" order or “offer” on a traditional orderbook.                                                                                                                                                                     | [Manage sell offer](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-sell-offer)                                                                                                                                                                                    |
-| [Create passive sell offer](documentation/sdk_examples/create_passive_sell_offer.md)                     | Creates, updates and deletes an offer to sell one asset for another, otherwise known as a "ask" order or “offer” on a traditional orderbook, _without taking a reverse offer of equal price_.                                                                                                                    | [Create passive sell offer](https://www.stellar.org/developers/learn/concepts/list-of-operations.html#create-passive-sell-offer)                                                                                                                                                                     |
-| [Change trust](documentation/sdk_examples/change_trust.md)                                               | Creates, updates, and deletes a trustline.                                                                                                                                                                                                                                                                       | [Change trust](https://www.stellar.org/developers/learn/concepts/list-of-operations.html#change-trust) and [Assets documentation](https://www.stellar.org/developers/learn/concepts/assets.html)                                                                                                     |
-| [Allow trust](documentation/sdk_examples/allow_trust.md)                                                 | Updates the authorized flag of an existing trustline.                                                                                                                                                                                                                                                            | [Allow trust](https://www.stellar.org/developers/learn/concepts/list-of-operations.html#allow-trust) and [Assets documentation](https://www.stellar.org/developers/learn/concepts/assets.html)                                                                                                       |
-| [Stream payments](documentation/sdk_examples/stream_payments.md)                                         | Listens for payments received by a given account.                                                                                                                                                                                                                                                                | [Streaming](https://developers.stellar.org/api/introduction/streaming/)                                                                                                                                                                                                                              |
-| [Fee bump transaction](documentation/sdk_examples/fee_bump.md)                                           | Fee bump transactions allow an arbitrary account to pay the fee for a transaction.                                                                                                                                                                                                                               | [Fee bump transactions](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0015.md)                                                                                                                                                                                                    |
-| [Muxed accounts](documentation/sdk_examples/muxed_account_payment.md)                                    | In this example we will see how to use a muxed account in a payment operation.                                                                                                                                                                                                                                   | [First-class multiplexed accounts](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0027.md)                                                                                                                                                                                         |
-| [SEP-0001: stellar.toml](documentation/sdk_examples/sep-0001-toml.md)                                    | In this example you can find out how to obtain data about an organization’s Stellar integration.                                                                                                                                                                                                                 | [SEP-0001](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md)                                                                                                                                                                                                            |
-| [SEP-0002: Federation](documentation/sdk_examples/sep-0002-federation.md)                                | This example shows how to resolve a stellar address, a stellar account id, a transaction id and a forward by using the federation protocol.                                                                                                                                                                      | [SEP-0002](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0002.md)                                                                                                                                                                                                            |
-| [SEP-0005: Key derivation](documentation/sdk_examples/sep-0005-key-derivation.md)                        | In this examples you can see how to generate 12 or 24 words mnemonics for different languages using the Flutter SDK, how to generate key pairs from a mnemonic (with and without BIP 39 passphrase) and how to generate key pairs from a BIP 39 seed.                                                            | [SEP-0005](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0005.md)                                                                                                                                                                                                            |
-| [SEP-0006: Deposit and Withdrawal API](documentation/sdk_examples/sep-0006-transfer.md)                  | In this examples you can see how to use the sdk to communicate with anchors.                                                                                                                                                                                                                                     | [SEP-0006](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0006.md)                                                                                                                                                                                                            |
-| [SEP-0007: URI Scheme to facilitate delegated signing](documentation/sdk_examples/sep-0007-urischeme.md) | In this examples you can see how to use the sdk to support SEP-0007 in your wallet.                                                                                                                                                                                                                              | [SEP-0007](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md)                                                                                                                                                                                                            |
-| [SEP-0010: Stellar Web Authentication](documentation/sdk_examples/sep-0010-webauth.md)                   | This example shows how to authenticate with any web service which requires a Stellar account ownership verification.                                                                                                                                                                                             | [SEP-0010](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md)                                                                                                                                                                                                            |
-| [SEP-0011: Txrep](documentation/sdk_examples/sep-0011-txrep.md)                                          | This example shows how to  to generate Txrep (human-readable low-level representation of Stellar transactions) from a transaction and how to create a transaction object from a Txrep string.                                                                                                                    | [SEP-0011](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0011.md)                                                                                                                                                                                                            |
-| [SEP-0012: KYC API](documentation/sdk_examples/sep-0012-kyc.md)                                          | In this examples you can see how to use the sdk to send KYC data to anchors and other services.                                                                                                                                                                                                                  | [SEP-0012](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0012.md)                                                                                                                                                                                                            |
-| [SEP-0024: Hosted Deposit and Withdrawal](documentation/sdk_examples/sep-0024.md)                        | In this examples you can see how to interact with anchors in a standard way defined by SEP-0024                                                                                                                                                                                                                  | [SEP-0024](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0024.md)                                                                                                                                                                                                            |
 
+| Example                                                                                                  | Description                                                                                                                                                                                                                                           | Documentation                                                                                                                                                                                                                                                                                        |
+| :------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Create a new account](documentation/sdk_examples/create_account.md)                                     | A new account is created by another account. In the testnet we can also use Freindbot.                                                                                                                                                                | [Create account](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#create-account)                                                                                                                                                                                          |
+| [Send native payment](documentation/sdk_examples/send_native_payment.md)                                 | A sender sends 100 XLM (Stellar Lumens) native payment to a receiver.                                                                                                                                                                                 | [Payments](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#payment)                                                                                                                                                                                                       |
+| [Create trustline](documentation/sdk_examples/trustline.md)                                              | An trustor account trusts an issuer account for a specific custom token. The issuer account can now send tokens to the trustor account.                                                                                                               | [Assets & Trustlines](https://www.stellar.org/developers/guides/concepts/assets.html) and [Change trust](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#change-trust)                                                                                                    |
+| [Send tokens - non native payment](documentation/sdk_examples/send_non_native_payment.md)                | Two accounts trust the same issuer account and custom token. They can now send this custom tokens to each other.                                                                                                                                      | [Assets & Trustlines](https://www.stellar.org/developers/guides/concepts/assets.html) and [Change trust](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#change-trust) and [Payments](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#payment) |
+| [Path payments](documentation/sdk_examples/path_payments.md)                                             | Two accounts trust different custom tokens. The sender wants to send token "IOM" but the receiver wants to receive token "ECO".                                                                                                                       | [Path payment strict send](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#path-payment-strict-send) and [Path payment strict receive](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#path-payment-strict-receive)                            |
+| [Merge accounts](documentation/sdk_examples/merge_account.md)                                            | Merge one account into another. The first account is removed, the second receives the funds.                                                                                                                                                          | [Account merge](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#account-merge)                                                                                                                                                                                            |
+| [Bump sequence number](documentation/sdk_examples/bump_sequence.md)                                      | In this example we will bump the sequence number of an account to a higher number.                                                                                                                                                                    | [Bump sequence number](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#bump-sequence)                                                                                                                                                                                     |
+| [Manage data](documentation/sdk_examples/manage_data.md)                                                 | Sets, modifies, or deletes a data entry (name/value pair) that is attached to a particular account.                                                                                                                                                   | [Manage data](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-data)                                                                                                                                                                                                |
+| [Manage buy offer](documentation/sdk_examples/manage_buy_offer.md)                                       | Creates, updates, or deletes an offer to buy one asset for another, otherwise known as a "bid" order on a traditional orderbook.                                                                                                                      | [Manage buy offer](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-buy-offer)                                                                                                                                                                                      |
+| [Manage sell offer](documentation/sdk_examples/manage_sell_offer.md)                                     | Creates, updates, or deletes an offer to sell one asset for another, otherwise known as a "ask" order or “offer” on a traditional orderbook.                                                                                                          | [Manage sell offer](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-sell-offer)                                                                                                                                                                                    |
+| [Create passive sell offer](documentation/sdk_examples/create_passive_sell_offer.md)                     | Creates, updates and deletes an offer to sell one asset for another, otherwise known as a "ask" order or “offer” on a traditional orderbook, _without taking a reverse offer of equal price_.                                                         | [Create passive sell offer](https://www.stellar.org/developers/learn/concepts/list-of-operations.html#create-passive-sell-offer)                                                                                                                                                                     |
+| [Change trust](documentation/sdk_examples/change_trust.md)                                               | Creates, updates, and deletes a trustline.                                                                                                                                                                                                            | [Change trust](https://www.stellar.org/developers/learn/concepts/list-of-operations.html#change-trust) and [Assets documentation](https://www.stellar.org/developers/learn/concepts/assets.html)                                                                                                     |
+| [Allow trust](documentation/sdk_examples/allow_trust.md)                                                 | Updates the authorized flag of an existing trustline.                                                                                                                                                                                                 | [Allow trust](https://www.stellar.org/developers/learn/concepts/list-of-operations.html#allow-trust) and [Assets documentation](https://www.stellar.org/developers/learn/concepts/assets.html)                                                                                                       |
+| [Stream payments](documentation/sdk_examples/stream_payments.md)                                         | Listens for payments received by a given account.                                                                                                                                                                                                     | [Streaming](https://developers.stellar.org/api/introduction/streaming/)                                                                                                                                                                                                                              |
+| [Fee bump transaction](documentation/sdk_examples/fee_bump.md)                                           | Fee bump transactions allow an arbitrary account to pay the fee for a transaction.                                                                                                                                                                    | [Fee bump transactions](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0015.md)                                                                                                                                                                                                    |
+| [Muxed accounts](documentation/sdk_examples/muxed_account_payment.md)                                    | In this example we will see how to use a muxed account in a payment operation.                                                                                                                                                                        | [First-class multiplexed accounts](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0027.md)                                                                                                                                                                                         |
+| [SEP-0001: stellar.toml](documentation/sdk_examples/sep-0001-toml.md)                                    | In this example you can find out how to obtain data about an organization’s Stellar integration.                                                                                                                                                      | [SEP-0001](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md)                                                                                                                                                                                                            |
+| [SEP-0002: Federation](documentation/sdk_examples/sep-0002-federation.md)                                | This example shows how to resolve a stellar address, a stellar account id, a transaction id and a forward by using the federation protocol.                                                                                                           | [SEP-0002](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0002.md)                                                                                                                                                                                                            |
+| [SEP-0005: Key derivation](documentation/sdk_examples/sep-0005-key-derivation.md)                        | In this examples you can see how to generate 12 or 24 words mnemonics for different languages using the Flutter SDK, how to generate key pairs from a mnemonic (with and without BIP 39 passphrase) and how to generate key pairs from a BIP 39 seed. | [SEP-0005](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0005.md)                                                                                                                                                                                                            |
+| [SEP-0006: Deposit and Withdrawal API](documentation/sdk_examples/sep-0006-transfer.md)                  | In this examples you can see how to use the sdk to communicate with anchors.                                                                                                                                                                          | [SEP-0006](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0006.md)                                                                                                                                                                                                            |
+| [SEP-0007: URI Scheme to facilitate delegated signing](documentation/sdk_examples/sep-0007-urischeme.md) | In this examples you can see how to use the sdk to support SEP-0007 in your wallet.                                                                                                                                                                   | [SEP-0007](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md)                                                                                                                                                                                                            |
+| [SEP-0010: Stellar Web Authentication](documentation/sdk_examples/sep-0010-webauth.md)                   | This example shows how to authenticate with any web service which requires a Stellar account ownership verification.                                                                                                                                  | [SEP-0010](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md)                                                                                                                                                                                                            |
+| [SEP-0011: Txrep](documentation/sdk_examples/sep-0011-txrep.md)                                          | This example shows how to to generate Txrep (human-readable low-level representation of Stellar transactions) from a transaction and how to create a transaction object from a Txrep string.                                                          | [SEP-0011](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0011.md)                                                                                                                                                                                                            |
+| [SEP-0012: KYC API](documentation/sdk_examples/sep-0012-kyc.md)                                          | In this examples you can see how to use the sdk to send KYC data to anchors and other services.                                                                                                                                                       | [SEP-0012](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0012.md)                                                                                                                                                                                                            |
+| [SEP-0024: Hosted Deposit and Withdrawal](documentation/sdk_examples/sep-0024.md)                        | In this examples you can see how to interact with anchors in a standard way defined by SEP-0024                                                                                                                                                       | [SEP-0024](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0024.md)                                                                                                                                                                                                            |
 
-Additional examples can be found in the [tests](https://github.com/Soneso/stellar_flutter_sdk/blob/master/test/).
+Additional examples can be found in the [tests](https://github.com/Soneso/pi_flutter_sdk/blob/master/test/).
 
 ### Documentation
 
@@ -313,8 +333,8 @@ You can find additional documentation including the API documentation in the [do
 - [SEP-0001 (stellar.toml)](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md)
 - [SEP-0002 (Federation)](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0002.md)
 - [SEP-0005 (Key derivation)](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0005.md)
-- [SEP-0006: Deposit and Withdrawal API](documentation/sdk_examples/sep-0006-transfer.md) 
-- [SEP-0007: URI Scheme to facilitate delegated signing](documentation/sdk_examples/sep-0007-urischeme.md) 
+- [SEP-0006: Deposit and Withdrawal API](documentation/sdk_examples/sep-0006-transfer.md)
+- [SEP-0007: URI Scheme to facilitate delegated signing](documentation/sdk_examples/sep-0007-urischeme.md)
 - [SEP-0010 (Stellar Web Authentication)](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md)
 - [SEP-0011 (Txrep)](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0011.md)
 - [SEP-0012: KYC API](documentation/sdk_examples/sep-0012-kyc.md)
@@ -322,15 +342,14 @@ You can find additional documentation including the API documentation in the [do
 
 ## Soroban support
 
-This SDK provides experimental [support for Soroban](https://github.com/Soneso/stellar_flutter_sdk/blob/master/soroban.md). 
-
+This SDK provides experimental [support for Soroban](https://github.com/Soneso/pi_flutter_sdk/blob/master/soroban.md).
 
 ## How to contribute
 
-Please read our [Contribution Guide](https://github.com/Soneso/stellar_flutter_sdk/blob/master/CONTRIBUTING.md).
+Please read our [Contribution Guide](https://github.com/Soneso/pi_flutter_sdk/blob/master/CONTRIBUTING.md).
 
 Then please [sign the Contributor License Agreement](https://goo.gl/forms/hS2KOI8d7WcelI892).
 
 ## License
 
-The Stellar Sdk for Flutter is licensed under an MIT license. See the [LICENSE](https://github.com/Soneso/stellar_flutter_sdk/blob/master/LICENSE) file for details.
+The Stellar Sdk for Flutter is licensed under an MIT license. See the [LICENSE](https://github.com/Soneso/pi_flutter_sdk/blob/master/LICENSE) file for details.

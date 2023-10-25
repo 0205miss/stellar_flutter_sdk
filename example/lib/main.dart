@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 import 'stellar_quest/series_1/series_1.dart' as s1;
 import 'stellar_quest/series_2/series_2.dart' as s2;

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 void main() {
   SorobanServer sorobanServer =
@@ -15,7 +15,7 @@ void main() {
   String invokerId = invokerKeypair.accountId;
 
   String authContractPath =
-      "/Users/chris/Soneso/github/stellar_flutter_sdk/test/wasm/soroban_auth_contract.wasm";
+      "/Users/chris/Soneso/github/pi_flutter_sdk/test/wasm/soroban_auth_contract.wasm";
   String? authContractWasmId;
   String? authContractId;
 
@@ -82,7 +82,7 @@ void main() {
         .addAll(transactionData.resources.footprint.readOnly);
     transactionData.resources.footprint.readOnly =
         List<XdrLedgerKey>.empty(growable: false);
-    
+
     accountA = await sdk.accounts.account(submitterId);
     RestoreFootprintOperation restoreOp =
         RestoreFootprintOperationBuilder().build();
@@ -138,8 +138,8 @@ void main() {
     List<XdrLedgerKey> readOnly = List<XdrLedgerKey>.empty(growable: true);
     List<XdrLedgerKey> readWrite = List<XdrLedgerKey>.empty(growable: false);
     XdrLedgerKey codeKey = XdrLedgerKey(XdrLedgerEntryType.CONTRACT_CODE);
-    codeKey.contractCode = XdrLedgerKeyContractCode(
-        XdrHash(Util.hexToBytes(wasmId)));
+    codeKey.contractCode =
+        XdrLedgerKeyContractCode(XdrHash(Util.hexToBytes(wasmId)));
     readOnly.add(codeKey);
 
     XdrLedgerFootprint footprint = XdrLedgerFootprint(readOnly, readWrite);
@@ -185,13 +185,13 @@ void main() {
     await Future.delayed(Duration(seconds: 5));
     // check horizon responses decoding
     TransactionResponse transactionResponse =
-    await sdk.transactions.transaction(sendResponse.hash!);
+        await sdk.transactions.transaction(sendResponse.hash!);
     assert(transactionResponse.operationCount == 1);
     assert(transactionEnvelopeXdr == transactionResponse.envelopeXdr);
 
     // check operation response from horizon
     Page<OperationResponse> operations =
-    await sdk.operations.forTransaction(sendResponse.hash!).execute();
+        await sdk.operations.forTransaction(sendResponse.hash!).execute();
     assert(operations.records != null && operations.records!.length > 0);
     OperationResponse operationResponse = operations.records!.first;
 
@@ -342,7 +342,8 @@ void main() {
           await sorobanServer.getLatestLedger();
       for (SorobanAuthorizationEntry a in auth!) {
         // update signature expiration ledger
-        a.credentials.addressCredentials!.signatureExpirationLedger = latestLedgerResponse.sequence! + 10;
+        a.credentials.addressCredentials!.signatureExpirationLedger =
+            latestLedgerResponse.sequence! + 10;
         // sign
         a.sign(invokerKeypair, Network.TESTNET);
       }

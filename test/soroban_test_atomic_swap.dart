@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 void main() {
   SorobanServer sorobanServer =
@@ -17,9 +17,9 @@ void main() {
   String bobId = bobKeypair.accountId;
 
   String tokenContractPath =
-      "/Users/chris/Soneso/github/stellar_flutter_sdk/test/wasm/soroban_token_contract.wasm";
+      "/Users/chris/Soneso/github/pi_flutter_sdk/test/wasm/soroban_token_contract.wasm";
   String swapContractPath =
-      "/Users/chris/Soneso/github/stellar_flutter_sdk/test/wasm/soroban_atomic_swap_contract.wasm";
+      "/Users/chris/Soneso/github/pi_flutter_sdk/test/wasm/soroban_atomic_swap_contract.wasm";
   String? tokenAContractWasmId;
   String? tokenAContractId;
   String? tokenBContractWasmId;
@@ -401,8 +401,8 @@ void main() {
     List<XdrLedgerKey> readOnly = List<XdrLedgerKey>.empty(growable: true);
     List<XdrLedgerKey> readWrite = List<XdrLedgerKey>.empty(growable: false);
     XdrLedgerKey codeKey = XdrLedgerKey(XdrLedgerEntryType.CONTRACT_CODE);
-    codeKey.contractCode = XdrLedgerKeyContractCode(
-        XdrHash(Util.hexToBytes(wasmId)));
+    codeKey.contractCode =
+        XdrLedgerKeyContractCode(XdrHash(Util.hexToBytes(wasmId)));
     readOnly.add(codeKey);
 
     XdrLedgerFootprint footprint = XdrLedgerFootprint(readOnly, readWrite);
@@ -448,13 +448,13 @@ void main() {
     await Future.delayed(Duration(seconds: 5));
     // check horizon responses decoding
     TransactionResponse transactionResponse =
-    await sdk.transactions.transaction(sendResponse.hash!);
+        await sdk.transactions.transaction(sendResponse.hash!);
     assert(transactionResponse.operationCount == 1);
     assert(transactionEnvelopeXdr == transactionResponse.envelopeXdr);
 
     // check operation response from horizon
     Page<OperationResponse> operations =
-    await sdk.operations.forTransaction(sendResponse.hash!).execute();
+        await sdk.operations.forTransaction(sendResponse.hash!).execute();
     assert(operations.records != null && operations.records!.length > 0);
     OperationResponse operationResponse = operations.records!.first;
 

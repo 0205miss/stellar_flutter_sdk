@@ -1,6 +1,6 @@
 @Timeout(const Duration(seconds: 400))
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'dart:convert';
@@ -83,7 +83,8 @@ void main() {
     assert(dusdfields!.length == 4);
     AnchorField? emailAddress = dusdfields!["email_address"];
     assert(emailAddress != null);
-    assert(emailAddress!.description == "your email address for transaction status updates");
+    assert(emailAddress!.description ==
+        "your email address for transaction status updates");
     assert(emailAddress!.optional!);
     assert(dusdfields["country_code"]!.choices!.contains("USA"));
     assert(dusdfields["type"]!.choices!.contains("SWIFT"));
@@ -165,7 +166,8 @@ void main() {
     depositRequest.amount = "3.123";
     depositRequest.jwt = jwtToken;
 
-    DepositResponse? depositResponse = await transferService.deposit(depositRequest);
+    DepositResponse? depositResponse =
+        await transferService.deposit(depositRequest);
 
     assert(depositResponse != null);
     assert(depositResponse!.how == "1Nh7uHdvY6fNwtQtM1G5EZAFPLC33B59rB");
@@ -195,10 +197,12 @@ void main() {
     depositRequest.amount = "300.0";
     depositRequest.jwt = jwtToken;
 
-    DepositResponse? depositResponse = await transferService.deposit(depositRequest);
+    DepositResponse? depositResponse =
+        await transferService.deposit(depositRequest);
 
     assert(depositResponse != null);
-    assert(depositResponse!.how == "Ripple address: rNXEkKCxvfLcM1h4HJkaj2FtmYuAWrHGbf tag: 88");
+    assert(depositResponse!.how ==
+        "Ripple address: rNXEkKCxvfLcM1h4HJkaj2FtmYuAWrHGbf tag: 88");
     assert(depositResponse!.id == "9421871e-0623-4356-b7b5-5996da122f3e");
     assert(depositResponse!.eta == 60);
     assert(depositResponse!.feePercent == 0.1);
@@ -228,10 +232,12 @@ void main() {
     depositRequest.amount = "120.0";
     depositRequest.jwt = jwtToken;
 
-    DepositResponse? depositResponse = await transferService.deposit(depositRequest);
+    DepositResponse? depositResponse =
+        await transferService.deposit(depositRequest);
 
     assert(depositResponse != null);
-    assert(depositResponse!.how == "Make a payment to Bank: STP Account: 646180111803859359");
+    assert(depositResponse!.how ==
+        "Make a payment to Bank: STP Account: 646180111803859359");
     assert(depositResponse!.id == "9421871e-0623-4356-b7b5-5996da122f3e");
     assert(depositResponse!.eta == 1800);
   });
@@ -255,16 +261,18 @@ void main() {
     WithdrawRequest withdrawRequest = WithdrawRequest();
     withdrawRequest.assetCode = "XLM";
     withdrawRequest.type = "crypto";
-    withdrawRequest.dest = "GCTTGO5ABSTHABXWL2FMHPZ2XFOZDXJYJN5CKFRKXMPAAWZW3Y3JZ3JK";
+    withdrawRequest.dest =
+        "GCTTGO5ABSTHABXWL2FMHPZ2XFOZDXJYJN5CKFRKXMPAAWZW3Y3JZ3JK";
     withdrawRequest.account = accountId;
     withdrawRequest.amount = "120.0";
     withdrawRequest.jwt = jwtToken;
 
-    WithdrawResponse? withdrawResponse = await transferService.withdraw(withdrawRequest);
+    WithdrawResponse? withdrawResponse =
+        await transferService.withdraw(withdrawRequest);
 
     assert(withdrawResponse != null);
-    assert(
-        withdrawResponse!.accountId == "GCIBUCGPOHWMMMFPFTDWBSVHQRT4DIBJ7AD6BZJYDITBK2LCVBYW7HUQ");
+    assert(withdrawResponse!.accountId ==
+        "GCIBUCGPOHWMMMFPFTDWBSVHQRT4DIBJ7AD6BZJYDITBK2LCVBYW7HUQ");
     assert(withdrawResponse!.memoType == "id");
     assert(withdrawResponse!.memo == "123");
     assert(withdrawResponse!.id == "9421871e-0623-4356-b7b5-5996da122f3e");
@@ -321,7 +329,8 @@ void main() {
     WithdrawRequest withdrawRequest = WithdrawRequest();
     withdrawRequest.assetCode = "XLM";
     withdrawRequest.type = "crypto";
-    withdrawRequest.dest = "GCTTGO5ABSTHABXWL2FMHPZ2XFOZDXJYJN5CKFRKXMPAAWZW3Y3JZ3JK";
+    withdrawRequest.dest =
+        "GCTTGO5ABSTHABXWL2FMHPZ2XFOZDXJYJN5CKFRKXMPAAWZW3Y3JZ3JK";
     withdrawRequest.account = accountId;
     withdrawRequest.amount = "120.0";
     withdrawRequest.jwt = jwtToken;
@@ -388,10 +397,12 @@ void main() {
 
     AnchorTransactionsRequest request = AnchorTransactionsRequest();
     request.assetCode = "XLM";
-    request.account = "GCTTGO5ABSTHABXWL2FMHPZ2XFOZDXJYJN5CKFRKXMPAAWZW3Y3JZ3JK";
+    request.account =
+        "GCTTGO5ABSTHABXWL2FMHPZ2XFOZDXJYJN5CKFRKXMPAAWZW3Y3JZ3JK";
     request.jwt = jwtToken;
 
-    AnchorTransactionsResponse? response = await transferService.transactions(request);
+    AnchorTransactionsResponse? response =
+        await transferService.transactions(request);
 
     assert(response != null);
     assert(response!.transactions!.length == 3);
@@ -408,7 +419,8 @@ void main() {
 
     assert(response!.transactions!.last!.requiredInfoMessage ==
         "We were unable to send funds to the provided bank account. Bank error: 'Account does not exist'. Please provide the correct bank account address.");
-    assert(response!.transactions!.last!.requiredInfoUpdates!["dest"]!.description ==
+    assert(response!
+            .transactions!.last!.requiredInfoUpdates!["dest"]!.description ==
         "your bank account number");
   });
 
@@ -434,7 +446,8 @@ void main() {
         "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
     request.jwt = jwtToken;
 
-    AnchorTransactionResponse? response = await transferService.transaction(request);
+    AnchorTransactionResponse? response =
+        await transferService.transaction(request);
 
     assert(response != null);
     assert(response!.transaction != null);

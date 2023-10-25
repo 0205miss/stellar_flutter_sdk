@@ -1,7 +1,7 @@
 @Timeout(const Duration(seconds: 300))
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 import 'tests_util.dart';
 
@@ -88,7 +88,7 @@ void main() {
     TransactionPreconditions precond = TransactionPreconditions();
     precond.timeBounds = new TimeBounds(1652110741, 1752110741);
     precond.ledgerBounds = new LedgerBounds(1, 1892052);
-    await Future.delayed(const Duration(seconds: 6), (){});
+    await Future.delayed(const Duration(seconds: 6), () {});
     precond.minSeqAge = 1;
     precond.minSeqLedgerGap = 1;
     precond.minSeqNumber = testSeqNr;
@@ -1094,8 +1094,9 @@ void main() {
 
     String envelopeXdrBase64 = transaction.toEnvelopeXdrBase64();
     AbstractTransaction abstractTransaction =
-    AbstractTransaction.fromEnvelopeXdrString(envelopeXdrBase64);
+        AbstractTransaction.fromEnvelopeXdrString(envelopeXdrBase64);
     Transaction transaction2 = abstractTransaction as Transaction;
-    assert(transaction.sourceAccount.accountId == transaction2.sourceAccount.accountId);
+    assert(transaction.sourceAccount.accountId ==
+        transaction2.sourceAccount.accountId);
   });
 }

@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -23,12 +23,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # stellar_flutter_sdk: ^0.8.0
-  # stellar_flutter_sdk:
+  # pi_flutter_sdk: ^0.8.0
+  # pi_flutter_sdk:
   #   git:
-  #     url: git://github.com/hasToDev/stellar_flutter_sdk.git
+  #     url: git://github.com/hasToDev/pi_flutter_sdk.git
   #     ref: a0f11e8a17ebbfa33bef94a9ac77db3711f2c7eb
-  stellar_flutter_sdk:
+  pi_flutter_sdk:
     path: ../
   sliver_tools: ^0.2.5
 
@@ -41,7 +41,6 @@ dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

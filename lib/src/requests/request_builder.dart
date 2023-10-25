@@ -5,9 +5,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:stellar_flutter_sdk/src/asset_type_credit_alphanum.dart';
-import 'package:stellar_flutter_sdk/src/asset_type_native.dart';
-import 'package:stellar_flutter_sdk/src/stellar_sdk.dart';
+import 'package:pi_flutter_sdk/src/asset_type_credit_alphanum.dart';
+import 'package:pi_flutter_sdk/src/asset_type_native.dart';
+import 'package:pi_flutter_sdk/src/stellar_sdk.dart';
 
 import '../assets.dart';
 import '../responses/response.dart';
@@ -65,7 +65,7 @@ abstract class RequestBuilder {
   bool _segmentsAdded = false;
   late Map<String, String> queryParameters;
   static final Map<String, String> headers = {
-    "X-Client-Name": "stellar_flutter_sdk",
+    "X-Client-Name": "pi_flutter_sdk",
     "X-Client-Version": StellarSDK.versionNumber
   };
 

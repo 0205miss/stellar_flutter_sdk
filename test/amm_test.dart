@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 import 'tests_util.dart';
 
@@ -378,11 +378,16 @@ void main() {
       assert(trades2.first.baseLiquidityPoolId == nonNativeLiquidityPoolId);
     });
 
-    test("parse liquidity pool resultXdr", (){
-      final input = XdrDataInputStream(base64Decode("AAAAAAAAAGT/////AAAAAQAAAAAAAAAW/////AAAAAA="));
+    test("parse liquidity pool resultXdr", () {
+      final input = XdrDataInputStream(
+          base64Decode("AAAAAAAAAGT/////AAAAAQAAAAAAAAAW/////AAAAAA="));
       final result = XdrTransactionResult.decode(input);
-      final operationResult = (result.result.results.first as XdrOperationResult).tr!.liquidityPoolDepositResult;
-      assert(operationResult!.discriminant == XdrLiquidityPoolDepositResultCode.LIQUIDITY_POOL_DEPOSIT_UNDERFUNDED);
+      final operationResult =
+          (result.result.results.first as XdrOperationResult)
+              .tr!
+              .liquidityPoolDepositResult;
+      assert(operationResult!.discriminant ==
+          XdrLiquidityPoolDepositResultCode.LIQUIDITY_POOL_DEPOSIT_UNDERFUNDED);
     });
   });
 }

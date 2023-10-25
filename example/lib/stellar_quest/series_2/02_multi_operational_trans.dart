@@ -1,4 +1,4 @@
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 import '../../extensions/account_response_extensions.dart';
 import '../../extensions/submit_transaction_response_extensions.dart';

@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 void main() {
   final domain = "place.domain.com";
@@ -40,14 +40,16 @@ void main() {
 
   TransactionPreconditions validTimeBounds() {
     TransactionPreconditions result = TransactionPreconditions();
-    result.timeBounds = TimeBounds(DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    result.timeBounds = TimeBounds(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000,
         DateTime.now().millisecondsSinceEpoch ~/ 1000 + 3);
     return result;
   }
 
   TransactionPreconditions invalidTimeBounds() {
     TransactionPreconditions result = TransactionPreconditions();
-    result.timeBounds = TimeBounds(DateTime.now().millisecondsSinceEpoch ~/ 1000 - 700,
+    result.timeBounds = TimeBounds(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 700,
         DateTime.now().millisecondsSinceEpoch ~/ 1000 - 400);
     return result;
   }

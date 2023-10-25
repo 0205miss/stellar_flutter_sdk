@@ -2,7 +2,7 @@
 // Use of this source code is governed by a license that can be
 // found in the LICENSE file.
 
-import 'package:stellar_flutter_sdk/src/xdr/xdr_type.dart';
+import 'package:pi_flutter_sdk/src/xdr/xdr_type.dart';
 
 import 'muxed_account.dart';
 import 'operation.dart';
@@ -20,12 +20,14 @@ class BumpFootprintExpirationOperation extends Operation {
   @override
   XdrOperationBody toOperationBody() {
     XdrOperationBody body =
-    XdrOperationBody(XdrOperationType.BUMP_FOOTPRINT_EXPIRATION);
-    body.bumpExpirationOp = XdrBumpFootprintExpirationOp(XdrExtensionPoint(0), XdrUint32(this._ledgersToExpire));
+        XdrOperationBody(XdrOperationType.BUMP_FOOTPRINT_EXPIRATION);
+    body.bumpExpirationOp = XdrBumpFootprintExpirationOp(
+        XdrExtensionPoint(0), XdrUint32(this._ledgersToExpire));
     return body;
   }
 
-  static BumpFootprintExpirationOperationBuilder builder(XdrBumpFootprintExpirationOp op) {
+  static BumpFootprintExpirationOperationBuilder builder(
+      XdrBumpFootprintExpirationOp op) {
     return BumpFootprintExpirationOperationBuilder(op.ledgersToExpire.uint32);
   }
 }
@@ -37,7 +39,8 @@ class BumpFootprintExpirationOperationBuilder {
   BumpFootprintExpirationOperationBuilder(this._ledgersToExpire);
 
   /// Sets the source account for this operation represented by [sourceAccountId].
-  BumpFootprintExpirationOperationBuilder setSourceAccount(String sourceAccountId) {
+  BumpFootprintExpirationOperationBuilder setSourceAccount(
+      String sourceAccountId) {
     MuxedAccount? sa = MuxedAccount.fromAccountId(sourceAccountId);
     _mSourceAccount = checkNotNull(sa, "invalid sourceAccountId");
     return this;
@@ -52,7 +55,8 @@ class BumpFootprintExpirationOperationBuilder {
 
   ///Builds an operation
   BumpFootprintExpirationOperation build() {
-    BumpFootprintExpirationOperation operation = BumpFootprintExpirationOperation(_ledgersToExpire);
+    BumpFootprintExpirationOperation operation =
+        BumpFootprintExpirationOperation(_ledgersToExpire);
     if (_mSourceAccount != null) {
       operation.sourceAccount = _mSourceAccount;
     }

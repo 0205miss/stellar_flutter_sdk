@@ -1,7 +1,7 @@
 @Timeout(const Duration(seconds: 400))
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 import 'tests_util.dart';
 
@@ -18,10 +18,13 @@ void main() {
     await FriendBot.fundTestAccount(buyerAccountId);
 
     AccountResponse buyerAccount = await sdk.accounts.account(buyerAccountId);
-    CreateAccountOperationBuilder caob = CreateAccountOperationBuilder(issuerAccountId, "10");
-    Transaction transaction = TransactionBuilder(buyerAccount).addOperation(caob.build()).build();
+    CreateAccountOperationBuilder caob =
+        CreateAccountOperationBuilder(issuerAccountId, "10");
+    Transaction transaction =
+        TransactionBuilder(buyerAccount).addOperation(caob.build()).build();
     transaction.sign(buyerKeipair, Network.TESTNET);
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
@@ -29,8 +32,10 @@ void main() {
 
     Asset astroDollar = AssetTypeCreditAlphaNum12(assetCode, issuerAccountId);
 
-    ChangeTrustOperationBuilder ctob = ChangeTrustOperationBuilder(astroDollar, "10000");
-    transaction = TransactionBuilder(buyerAccount).addOperation(ctob.build()).build();
+    ChangeTrustOperationBuilder ctob =
+        ChangeTrustOperationBuilder(astroDollar, "10000");
+    transaction =
+        TransactionBuilder(buyerAccount).addOperation(ctob.build()).build();
     transaction.sign(buyerKeipair, Network.TESTNET);
 
     response = await sdk.submitTransaction(transaction);
@@ -40,15 +45,17 @@ void main() {
     String amountBuying = "100";
     String price = "0.5";
 
-    ManageBuyOfferOperation ms =
-        ManageBuyOfferOperationBuilder(Asset.NATIVE, astroDollar, amountBuying, price).build();
+    ManageBuyOfferOperation ms = ManageBuyOfferOperationBuilder(
+            Asset.NATIVE, astroDollar, amountBuying, price)
+        .build();
     transaction = TransactionBuilder(buyerAccount).addOperation(ms).build();
     transaction.sign(buyerKeipair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
-    List<OfferResponse>? offers = (await sdk.offers.forAccount(buyerAccountId).execute()).records;
+    List<OfferResponse>? offers =
+        (await sdk.offers.forAccount(buyerAccountId).execute()).records;
     assert(offers!.length == 1);
     OfferResponse offer = offers!.first;
     assert(offer.buying == astroDollar);
@@ -70,9 +77,11 @@ void main() {
     String offerId2 = offer.id;
     assert(offerId == offerId2);
 
-
-    OrderBookResponse orderBook =
-        await sdk.orderBook.buyingAsset(astroDollar).sellingAsset(Asset.NATIVE).limit(1).execute();
+    OrderBookResponse orderBook = await sdk.orderBook
+        .buyingAsset(astroDollar)
+        .sellingAsset(Asset.NATIVE)
+        .limit(1)
+        .execute();
     offerAmount = double.parse(orderBook.asks.first.amount);
     offerPrice = double.parse(orderBook.asks.first.price);
 
@@ -88,8 +97,11 @@ void main() {
     assert(counter12.code == assetCode);
     assert(counter12.issuerId == issuerAccountId);
 
-    orderBook =
-        await sdk.orderBook.buyingAsset(Asset.NATIVE).sellingAsset(astroDollar).limit(1).execute();
+    orderBook = await sdk.orderBook
+        .buyingAsset(Asset.NATIVE)
+        .sellingAsset(astroDollar)
+        .limit(1)
+        .execute();
     offerAmount = double.parse(orderBook.bids.first.amount);
     offerPrice = double.parse(orderBook.bids.first.price);
 
@@ -98,7 +110,8 @@ void main() {
     // update offer
     amountBuying = "150";
     price = "0.3";
-    ms = ManageBuyOfferOperationBuilder(Asset.NATIVE, astroDollar, amountBuying, price)
+    ms = ManageBuyOfferOperationBuilder(
+            Asset.NATIVE, astroDollar, amountBuying, price)
         .setOfferId(offerId)
         .build();
     transaction = TransactionBuilder(buyerAccount).addOperation(ms).build();
@@ -121,8 +134,11 @@ void main() {
 
     assert(offer.seller == buyerAccountId);
 
-    orderBook =
-        await sdk.orderBook.buyingAsset(astroDollar).sellingAsset(Asset.NATIVE).limit(1).execute();
+    orderBook = await sdk.orderBook
+        .buyingAsset(astroDollar)
+        .sellingAsset(Asset.NATIVE)
+        .limit(1)
+        .execute();
     offerAmount = double.parse(orderBook.asks.first.amount);
     offerPrice = double.parse(orderBook.asks.first.price);
 
@@ -140,7 +156,8 @@ void main() {
 
     // delete offer
     amountBuying = "0";
-    ms = ManageBuyOfferOperationBuilder(Asset.NATIVE, astroDollar, amountBuying, price)
+    ms = ManageBuyOfferOperationBuilder(
+            Asset.NATIVE, astroDollar, amountBuying, price)
         .setOfferId(offerId)
         .build();
     transaction = TransactionBuilder(buyerAccount).addOperation(ms).build();
@@ -152,8 +169,11 @@ void main() {
     offers = (await sdk.offers.forAccount(buyerAccountId).execute()).records;
     assert(offers!.length == 0);
 
-    orderBook =
-        await sdk.orderBook.buyingAsset(astroDollar).sellingAsset(Asset.NATIVE).limit(1).execute();
+    orderBook = await sdk.orderBook
+        .buyingAsset(astroDollar)
+        .sellingAsset(Asset.NATIVE)
+        .limit(1)
+        .execute();
     assert(orderBook.asks.length == 0);
     assert(orderBook.bids.length == 0);
   });
@@ -168,10 +188,13 @@ void main() {
     await FriendBot.fundTestAccount(sellerAccountId);
 
     AccountResponse sellerAccount = await sdk.accounts.account(sellerAccountId);
-    CreateAccountOperation co = CreateAccountOperationBuilder(issuerAccountId, "10").build();
-    Transaction transaction = TransactionBuilder(sellerAccount).addOperation(co).build();
+    CreateAccountOperation co =
+        CreateAccountOperationBuilder(issuerAccountId, "10").build();
+    Transaction transaction =
+        TransactionBuilder(sellerAccount).addOperation(co).build();
     transaction.sign(sellerKeipair, Network.TESTNET);
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
@@ -181,15 +204,18 @@ void main() {
 
     Asset moonDollar = AssetTypeCreditAlphaNum4(assetCode, issuerAccountId);
 
-    ChangeTrustOperationBuilder ctob = ChangeTrustOperationBuilder(moonDollar, "10000");
-    transaction = TransactionBuilder(sellerAccount).addOperation(ctob.build()).build();
+    ChangeTrustOperationBuilder ctob =
+        ChangeTrustOperationBuilder(moonDollar, "10000");
+    transaction =
+        TransactionBuilder(sellerAccount).addOperation(ctob.build()).build();
     transaction.sign(sellerKeipair, Network.TESTNET);
 
     response = await sdk.submitTransaction(transaction);
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
-    PaymentOperation po = PaymentOperationBuilder(sellerAccountId, moonDollar, "2000").build();
+    PaymentOperation po =
+        PaymentOperationBuilder(sellerAccountId, moonDollar, "2000").build();
     transaction = TransactionBuilder(issuerAccount).addOperation(po).build();
     transaction.sign(issuerKeipair, Network.TESTNET);
 
@@ -200,15 +226,17 @@ void main() {
     String amountSelling = "100";
     String price = "0.5";
 
-    ManageSellOfferOperation ms =
-        ManageSellOfferOperationBuilder(moonDollar, Asset.NATIVE, amountSelling, price).build();
+    ManageSellOfferOperation ms = ManageSellOfferOperationBuilder(
+            moonDollar, Asset.NATIVE, amountSelling, price)
+        .build();
     transaction = TransactionBuilder(sellerAccount).addOperation(ms).build();
     transaction.sign(sellerKeipair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
-    List<OfferResponse>? offers = (await sdk.offers.forAccount(sellerAccountId).execute()).records;
+    List<OfferResponse>? offers =
+        (await sdk.offers.forAccount(sellerAccountId).execute()).records;
     assert(offers!.length == 1);
     OfferResponse offer = offers!.first;
     assert(offer.buying == Asset.NATIVE);
@@ -232,8 +260,11 @@ void main() {
     String offerId2 = offer.id;
     assert(offerId == offerId2);
 
-    OrderBookResponse orderBook =
-        await sdk.orderBook.buyingAsset(Asset.NATIVE).sellingAsset(moonDollar).limit(1).execute();
+    OrderBookResponse orderBook = await sdk.orderBook
+        .buyingAsset(Asset.NATIVE)
+        .sellingAsset(moonDollar)
+        .limit(1)
+        .execute();
     offerAmount = double.parse(orderBook.asks.first.amount);
     assert(offerAmount == sellingAmount);
     offerPrice = double.parse(orderBook.asks.first.price);
@@ -249,8 +280,11 @@ void main() {
     assert(base4.code == assetCode);
     assert(base4.issuerId == issuerAccountId);
 
-    orderBook =
-        await sdk.orderBook.buyingAsset(moonDollar).sellingAsset(Asset.NATIVE).limit(1).execute();
+    orderBook = await sdk.orderBook
+        .buyingAsset(moonDollar)
+        .sellingAsset(Asset.NATIVE)
+        .limit(1)
+        .execute();
     offerAmount = double.parse(orderBook.bids.first.amount);
     offerPrice = double.parse(orderBook.bids.first.price);
     assert((offerAmount * offerPrice).round() == 200);
@@ -258,7 +292,8 @@ void main() {
     // update offer
     amountSelling = "150";
     price = "0.3";
-    ms = ManageSellOfferOperationBuilder(moonDollar, Asset.NATIVE, amountSelling, price)
+    ms = ManageSellOfferOperationBuilder(
+            moonDollar, Asset.NATIVE, amountSelling, price)
         .setOfferId(offerId)
         .build();
     transaction = TransactionBuilder(sellerAccount).addOperation(ms).build();
@@ -286,7 +321,8 @@ void main() {
 
     // delete offer
     amountSelling = "0";
-    ms = ManageSellOfferOperationBuilder(moonDollar, Asset.NATIVE, amountSelling, price)
+    ms = ManageSellOfferOperationBuilder(
+            moonDollar, Asset.NATIVE, amountSelling, price)
         .setOfferId(offerId)
         .build();
     transaction = TransactionBuilder(sellerAccount).addOperation(ms).build();
@@ -308,10 +344,13 @@ void main() {
     await FriendBot.fundTestAccount(sellerAccountId);
 
     AccountResponse sellerAccount = await sdk.accounts.account(sellerAccountId);
-    CreateAccountOperation co = CreateAccountOperationBuilder(issuerAccountId, "10").build();
-    Transaction transaction = TransactionBuilder(sellerAccount).addOperation(co).build();
+    CreateAccountOperation co =
+        CreateAccountOperationBuilder(issuerAccountId, "10").build();
+    Transaction transaction =
+        TransactionBuilder(sellerAccount).addOperation(co).build();
     transaction.sign(sellerKeipair, Network.TESTNET);
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
@@ -319,15 +358,18 @@ void main() {
 
     Asset marsDollar = AssetTypeCreditAlphaNum4("MARS", issuerAccountId);
 
-    ChangeTrustOperationBuilder ctob = ChangeTrustOperationBuilder(marsDollar, "10000");
-    transaction = TransactionBuilder(sellerAccount).addOperation(ctob.build()).build();
+    ChangeTrustOperationBuilder ctob =
+        ChangeTrustOperationBuilder(marsDollar, "10000");
+    transaction =
+        TransactionBuilder(sellerAccount).addOperation(ctob.build()).build();
     transaction.sign(sellerKeipair, Network.TESTNET);
 
     response = await sdk.submitTransaction(transaction);
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
-    PaymentOperation po = PaymentOperationBuilder(sellerAccountId, marsDollar, "2000").build();
+    PaymentOperation po =
+        PaymentOperationBuilder(sellerAccountId, marsDollar, "2000").build();
     transaction = TransactionBuilder(issuerAccount).addOperation(po).build();
     transaction.sign(issuerKeipair, Network.TESTNET);
 
@@ -339,7 +381,8 @@ void main() {
     String price = "0.5";
 
     CreatePassiveSellOfferOperation cpso =
-        CreatePassiveSellOfferOperationBuilder(marsDollar, Asset.NATIVE, amountSelling, price)
+        CreatePassiveSellOfferOperationBuilder(
+                marsDollar, Asset.NATIVE, amountSelling, price)
             .build();
     transaction = TransactionBuilder(sellerAccount).addOperation(cpso).build();
     transaction.sign(sellerKeipair, Network.TESTNET);
@@ -347,7 +390,8 @@ void main() {
     assert(response.success);
     TestUtils.resultDeAndEncodingTest(transaction, response);
 
-    List<OfferResponse>? offers = (await sdk.offers.forAccount(sellerAccountId).execute()).records;
+    List<OfferResponse>? offers =
+        (await sdk.offers.forAccount(sellerAccountId).execute()).records;
     assert(offers!.length == 1);
     OfferResponse offer = offers!.first;
     assert(offer.buying == Asset.NATIVE);
@@ -368,10 +412,10 @@ void main() {
     // update offer
     amountSelling = "150";
     price = "0.3";
-    ManageSellOfferOperation ms =
-        ManageSellOfferOperationBuilder(marsDollar, Asset.NATIVE, amountSelling, price)
-            .setOfferId(offerId)
-            .build();
+    ManageSellOfferOperation ms = ManageSellOfferOperationBuilder(
+            marsDollar, Asset.NATIVE, amountSelling, price)
+        .setOfferId(offerId)
+        .build();
     transaction = TransactionBuilder(sellerAccount).addOperation(ms).build();
     transaction.sign(sellerKeipair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
@@ -397,7 +441,8 @@ void main() {
 
     // delete offer
     amountSelling = "0";
-    ms = ManageSellOfferOperationBuilder(marsDollar, Asset.NATIVE, amountSelling, price)
+    ms = ManageSellOfferOperationBuilder(
+            marsDollar, Asset.NATIVE, amountSelling, price)
         .setOfferId(offerId)
         .build();
     transaction = TransactionBuilder(sellerAccount).addOperation(ms).build();

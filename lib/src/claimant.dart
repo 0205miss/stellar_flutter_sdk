@@ -2,7 +2,7 @@
 // Use of this source code is governed by a license that can be
 // found in the LICENSE file.
 
-import 'package:stellar_flutter_sdk/src/xdr/xdr_type.dart';
+import 'package:pi_flutter_sdk/src/xdr/xdr_type.dart';
 
 import 'xdr/xdr_ledger.dart';
 import 'xdr/xdr_account.dart';

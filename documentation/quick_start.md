@@ -1,9 +1,9 @@
-
-## [Stellar SDK for Flutter](https://github.com/Soneso/stellar_flutter_sdk) Quick Start
+## [Stellar SDK for Flutter](https://github.com/Soneso/pi_flutter_sdk) Quick Start
 
 ### 1. Create a Stellar key pair
 
 #### Random generation
+
 ```dart
 // create a completely new and unique pair of keys.
 KeyPair keyPair = KeyPair.random();
@@ -16,14 +16,18 @@ print("${keyPair.secretSeed}");
 ```
 
 ### 2. Create an account
+
 After the key pair generation, you have already got the address, but it is not activated until someone transfers at least 1 lumen into it.
 
 #### 2.1 Testnet
+
 If you want to play in the Stellar test network, the SDK can ask Friendbot to create an account for you as shown below:
+
 ```dart
 bool funded = await FriendBot.fundTestAccount(keyPair.accountId);
 print ("funded: ${funded}");
 ```
+
 #### 2.2 Public net
 
 On the other hand, if you would like to create an account in the public net, you should buy some Stellar Lumens (XLM) from an exchange. When you withdraw the Lumens into your new account, the exchange will automatically create the account for you. However, if you want to create an account from another account of your own, you may run the following code:
@@ -58,6 +62,7 @@ if (response.success) {
 ```
 
 ### 3. Check account
+
 #### 3.1 Basic info
 
 After creating the account, we may check the basic information of the account.
@@ -108,11 +113,12 @@ for (OperationResponse response in payments.records) {
   }
 }
 ```
+
 You can use:`limit`, `order`, and `cursor` to customize the query. Get the most recent payments for accounts, ledgers and transactions.
 
 #### 3.3 Check others
 
-Just like payments, you you check `assets`, `transactions`, `effects`, `offers`, `operations`, `ledgers` etc. 
+Just like payments, you you check `assets`, `transactions`, `effects`, `offers`, `operations`, `ledgers` etc.
 
 ```dart
 sdk.assets.
@@ -124,6 +130,7 @@ sdk.orderBook.
 sdk.trades.
 // add so on ...
 ```
+
 ### 4. Building and submitting transactions
 
 Example "send native payment":

@@ -1,11 +1,8 @@
-
 ### SEP-0007 - URI Scheme to facilitate delegated signing
-
-
 
 URI Scheme to facilitate delegated signing is described in [SEP-0007](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md). This Stellar Ecosystem Proposal introduces a URI Scheme that can be used to generate a URI that will serve as a request to sign a transaction. The URI (request) will typically be signed by the user’s trusted wallet where she stores her secret key(s).
 
-This SDK provides utility features to facilitate the implementation of SEP-0007 in a Flutter Wallet. These features are implemented in the [URIScheme](https://github.com/Soneso/stellar_flutter_sdk/blob/master/lib/src/sep/0007/URIScheme.dart) class and are described below.
+This SDK provides utility features to facilitate the implementation of SEP-0007 in a Flutter Wallet. These features are implemented in the [URIScheme](https://github.com/Soneso/pi_flutter_sdk/blob/master/lib/src/sep/0007/URIScheme.dart) class and are described below.
 
 **Generate a transaction uri**
 
@@ -20,6 +17,7 @@ String generateSignTransactionURI(String transactionEnvelopeXdrBase64,
       String? originDomain,
       String? signature})
 ```
+
 This function can be used to generate a URIScheme compliant URL to serve as a request to sign a transaction.
 
 Example:
@@ -75,9 +73,11 @@ print(url);
 ```
 
 **Check if URI Scheme is valid**
+
 ```dart
-Future<bool> checkUIRSchemeIsValid(String url) async 
+Future<bool> checkUIRSchemeIsValid(String url) async
 ```
+
 Checks if the received SEP-0007 URL is valid; signature and domain must be present and correct for the signer's keypair.
 Returns true if valid, otherwise throws the corresponding URISchemeError.
 
@@ -90,8 +90,8 @@ await uriScheme.checkUIRSchemeIsValid(url).then((response) {
 }).catchError((error) async {
   if (error is URISchemeError &&
       error.type == URISchemeError.tomlSignatureMissing){
-    // handle error      
-  } 
+    // handle error
+  }
 });
 ```
 
@@ -111,6 +111,7 @@ static const int tomlSignatureMissing = 5;
 ```dart
 String signURI(String url, KeyPair signerKeypair)
 ```
+
 Signs the URIScheme compliant SEP-0007 url with the signer's key pair. Returns the signed url having the signature parameter attached.
 Be careful with this function, you should validate the url and ask the user for permission before using this function.
 
@@ -131,8 +132,9 @@ print(url);
 ```dart
 Future<SubmitUriSchemeTransactionResponse> signAndSubmitTransaction(
   String url, KeyPair signerKeyPair,
-  {Network? network}) async 
+  {Network? network}) async
 ```
+
 Signs the given transaction and submits it to the callback url if available, otherwise it submits it to the stellar network.
 Be careful with this function, you should validate the url and ask the user for permission before using this function.
 
@@ -144,7 +146,7 @@ SubmitUriSchemeTransactionResponse response = await uriScheme
         .signAndSubmitTransaction(url, signerKeyPair, network: Network.TESTNET);
 ```
 
-```SubmitUriSchemeTransactionResponse``` has two members: ```submitTransactionResponse``` and ```response```. ```submitTransactionResponse``` is filled if the transaction has been send to the stellar network. ```response``` is filled if the transaction has been sent to the callback.
+`SubmitUriSchemeTransactionResponse` has two members: `submitTransactionResponse` and `response`. `submitTransactionResponse` is filled if the transaction has been send to the stellar network. `response` is filled if the transaction has been sent to the callback.
 
 ```dart
 class SubmitUriSchemeTransactionResponse {
@@ -166,7 +168,6 @@ String? getParameterValue(String name, String url)
 
 Utility function that returns the value of the given url parameter from the specified SEP-0007 url.
 
-
 **More examples**
 
-You can find more examples in the [SEP-0007 Test Cases](https://github.com/Soneso/stellar_flutter_sdk/blob/master/test/sep0007_test.dart)
+You can find more examples in the [SEP-0007 Test Cases](https://github.com/Soneso/pi_flutter_sdk/blob/master/test/sep0007_test.dart)

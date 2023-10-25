@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 void main() {
   SorobanServer sorobanServer =
@@ -17,13 +17,13 @@ void main() {
   Asset assetFsdk = AssetTypeCreditAlphaNum4("Fsdk", accountBId);
 
   String helloContractPath =
-      "/Users/chris/Soneso/github/stellar_flutter_sdk/test/wasm/soroban_hello_world_contract.wasm";
+      "/Users/chris/Soneso/github/pi_flutter_sdk/test/wasm/soroban_hello_world_contract.wasm";
   String? helloContractWasmId;
   String? helloContractId;
   Footprint? helloContractCreateFootprint;
 
   String eventsContractPath =
-      "/Users/chris/Soneso/github/stellar_flutter_sdk/test/wasm/soroban_events_contract.wasm";
+      "/Users/chris/Soneso/github/pi_flutter_sdk/test/wasm/soroban_events_contract.wasm";
 
   Uint8List? helloContractCode;
 
@@ -140,8 +140,8 @@ void main() {
     List<XdrLedgerKey> readOnly = List<XdrLedgerKey>.empty(growable: true);
     List<XdrLedgerKey> readWrite = List<XdrLedgerKey>.empty(growable: false);
     XdrLedgerKey codeKey = XdrLedgerKey(XdrLedgerEntryType.CONTRACT_CODE);
-    codeKey.contractCode = XdrLedgerKeyContractCode(
-        XdrHash(Util.hexToBytes(wasmId)));
+    codeKey.contractCode =
+        XdrLedgerKeyContractCode(XdrHash(Util.hexToBytes(wasmId)));
     readOnly.add(codeKey);
 
     XdrLedgerFootprint footprint = XdrLedgerFootprint(readOnly, readWrite);
@@ -189,13 +189,13 @@ void main() {
     await Future.delayed(Duration(seconds: 5));
     // check horizon responses decoding
     TransactionResponse transactionResponse =
-    await sdk.transactions.transaction(sendResponse.hash!);
+        await sdk.transactions.transaction(sendResponse.hash!);
     assert(transactionResponse.operationCount == 1);
     assert(transactionEnvelopeXdr == transactionResponse.envelopeXdr);
 
     // check operation response from horizon
     Page<OperationResponse> operations =
-    await sdk.operations.forTransaction(sendResponse.hash!).execute();
+        await sdk.operations.forTransaction(sendResponse.hash!).execute();
     assert(operations.records != null && operations.records!.length > 0);
     OperationResponse operationResponse = operations.records!.first;
 
@@ -218,8 +218,7 @@ void main() {
       assert(!networkResponse.isErrorResponse);
       assert("https://friendbot-testnet.stellar.org/" ==
           networkResponse.friendbotUrl);
-      assert("Test SDF Network ; September 2015" ==
-          networkResponse.passphrase);
+      assert("Test SDF Network ; September 2015" == networkResponse.passphrase);
     });
 
     test('test get latest ledger', () async {
@@ -624,7 +623,9 @@ void main() {
       //    [XdrSCVal.forSymbol('COUNTER').toBase64EncodedXdrString(), "*"]);
 
       EventFilter eventFilter = EventFilter(
-          type: "contract", contractIds: [StrKey.encodeContractIdHex(contractId)], topics: [topicFilter]);
+          type: "contract",
+          contractIds: [StrKey.encodeContractIdHex(contractId)],
+          topics: [topicFilter]);
       GetEventsRequest eventsRequest =
           GetEventsRequest(startLedger, filters: [eventFilter]);
       GetEventsResponse eventsResponse =
@@ -659,14 +660,17 @@ void main() {
       assert(contractDataEntry.ledgerEntryDataXdr != null);
       assert(true);
 
-      XdrContractCodeEntry? cCodeEntry = await sorobanServer.loadContractCodeForWasmId(helloContractWasmId!);
+      XdrContractCodeEntry? cCodeEntry =
+          await sorobanServer.loadContractCodeForWasmId(helloContractWasmId!);
       assert(cCodeEntry != null);
-      assert(base64Encode(cCodeEntry!.code.dataValue) == base64Encode(helloContractCode!));
+      assert(base64Encode(cCodeEntry!.code.dataValue) ==
+          base64Encode(helloContractCode!));
 
-      cCodeEntry = await sorobanServer.loadContractCodeForContractId(helloContractId!);
+      cCodeEntry =
+          await sorobanServer.loadContractCodeForContractId(helloContractId!);
       assert(cCodeEntry != null);
-      assert(base64Encode(cCodeEntry!.code.dataValue) == base64Encode(helloContractCode!));
-
+      assert(base64Encode(cCodeEntry!.code.dataValue) ==
+          base64Encode(helloContractCode!));
     });
 
     test('test deploy SAC with source account', () async {
@@ -855,6 +859,5 @@ void main() {
       assert(
           contractIdA == Util.bytesToHex(StrKey.decodeContractId(strEncodedC)));
     });
-
   });
 }

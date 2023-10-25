@@ -124,7 +124,7 @@ class StellarToml {
       if (trimmedLine.startsWith("[ACCOUNTS]")) {
         log(
           "Replacing [ACCOUNTS] with [[ACCOUNTS]]. The [ACCOUNTS] value is invalid, please contact the issuer of the stellar.toml file and ask them to fix their stellar.toml file.",
-          name: "stellar_flutter_sdk",
+          name: "pi_flutter_sdk",
         );
         lines[i] = lines[i].replaceFirst(
           "[ACCOUNTS]",
@@ -134,7 +134,7 @@ class StellarToml {
       if (trimmedLine.startsWith("[[DOCUMENTATION]]")) {
         log(
           "Replacing [[DOCUMENTATION]] with [DOCUMENTATION]. The [[DOCUMENTATION]] value is invalid, please contact the issuer of the stellar.toml file and ask them to fix their stellar.toml file.",
-          name: "stellar_flutter_sdk",
+          name: "pi_flutter_sdk",
         );
         lines[i] = lines[i].replaceFirst(
           "[[DOCUMENTATION]]",
@@ -144,7 +144,7 @@ class StellarToml {
       if (trimmedLine.startsWith("[PRINCIPALS]")) {
         log(
           "Replacing [PRINCIPALS] with [[PRINCIPALS]]. The [PRINCIPALS] value is invalid, please contact the issuer of the stellar.toml file and ask them to fix their stellar.toml file.",
-          name: "stellar_flutter_sdk",
+          name: "pi_flutter_sdk",
         );
         lines[i] = lines[i].replaceFirst(
           "[PRINCIPALS]",
@@ -154,7 +154,7 @@ class StellarToml {
       if (trimmedLine.startsWith("[CURRENCIES]")) {
         log(
           "Replacing [CURRENCIES] with [[CURRENCIES]]. The [CURRENCIES] value is invalid, please contact the issuer of the stellar.toml file and ask them to fix their stellar.toml file.",
-          name: "stellar_flutter_sdk",
+          name: "pi_flutter_sdk",
         );
         lines[i] = lines[i].replaceFirst(
           "[CURRENCIES]",
@@ -164,7 +164,7 @@ class StellarToml {
       if (trimmedLine.startsWith("[VALIDATORS]")) {
         log(
           "Replacing [VALIDATORS] with [[VALIDATORS]]. The [VALIDATORS] value is invalid, please contact the issuer of the stellar.toml file and ask them to fix their stellar.toml file.",
-          name: "stellar_flutter_sdk",
+          name: "pi_flutter_sdk",
         );
         lines[i] = lines[i].replaceFirst(
           "[VALIDATORS]",

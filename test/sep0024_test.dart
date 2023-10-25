@@ -1,6 +1,6 @@
 @Timeout(const Duration(seconds: 400))
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'dart:convert';
@@ -64,14 +64,14 @@ void main() {
     assert(depositAssetETH.feeMinimum == null);
     assert(depositAssetETH.minAmount == null);
     assert(depositAssetETH.maxAmount == null);
-    SEP24DepositAsset depositAssetNative = infoResponse.depositAssets!["native"]!;
+    SEP24DepositAsset depositAssetNative =
+        infoResponse.depositAssets!["native"]!;
     assert(depositAssetNative.enabled);
     assert(depositAssetNative.feeFixed == 0.00001);
     assert(depositAssetNative.feePercent == 0.0);
     assert(depositAssetNative.feeMinimum == null);
     assert(depositAssetNative.minAmount == null);
     assert(depositAssetNative.maxAmount == null);
-
 
     SEP24WithdrawAsset withdrawAssetUSD = infoResponse.withdrawAssets!["USD"]!;
     assert(withdrawAssetUSD.enabled);
@@ -83,7 +83,8 @@ void main() {
 
     SEP24WithdrawAsset withdrawAssetETH = infoResponse.withdrawAssets!["ETH"]!;
     assert(!withdrawAssetETH.enabled);
-    SEP24WithdrawAsset withdrawAssetNative = infoResponse.withdrawAssets!["native"]!;
+    SEP24WithdrawAsset withdrawAssetNative =
+        infoResponse.withdrawAssets!["native"]!;
     assert(withdrawAssetNative.enabled);
 
     assert(!infoResponse.feeEndpointInfo!.enabled);
@@ -142,7 +143,9 @@ void main() {
 
     assert("82fhs729f63dh0v4" == response.id);
     assert("completed" == response.type);
-    assert("https://api.example.com/kycflow?account=GACW7NONV43MZIFHCOKCQJAKSJSISSICFVUJ2C6EZIW5773OU3HD64VI" == response.url);
+    assert(
+        "https://api.example.com/kycflow?account=GACW7NONV43MZIFHCOKCQJAKSJSISSICFVUJ2C6EZIW5773OU3HD64VI" ==
+            response.url);
   });
 
   test('withdraw sep 24', () async {
@@ -152,7 +155,9 @@ void main() {
       String contentType = request.headers["content-type"]!;
       if (request.url.toString().startsWith(serviceAddress) &&
           request.method == "POST" &&
-          request.url.toString().contains("transactions/withdraw/interactive") &&
+          request.url
+              .toString()
+              .contains("transactions/withdraw/interactive") &&
           authHeader.contains(jwtToken) &&
           contentType.startsWith("multipart/form-data;")) {
         return http.Response(requestInteractive(), 200);
@@ -170,7 +175,9 @@ void main() {
 
     assert("82fhs729f63dh0v4" == response.id);
     assert("completed" == response.type);
-    assert("https://api.example.com/kycflow?account=GACW7NONV43MZIFHCOKCQJAKSJSISSICFVUJ2C6EZIW5773OU3HD64VI" == response.url);
+    assert(
+        "https://api.example.com/kycflow?account=GACW7NONV43MZIFHCOKCQJAKSJSISSICFVUJ2C6EZIW5773OU3HD64VI" ==
+            response.url);
   });
 
   test('test multiple transactions', () async {
@@ -192,7 +199,8 @@ void main() {
     request.assetCode = "ETH";
     request.jwt = jwtToken;
 
-    SEP24TransactionsResponse response = await transferService.transactions(request);
+    SEP24TransactionsResponse response =
+        await transferService.transactions(request);
     List<SEP24Transaction> transactions = response.transactions;
     assert(transactions.length == 4);
 
@@ -201,7 +209,8 @@ void main() {
     assert("deposit" == transaction.kind);
     assert("pending_external" == transaction.status);
     assert(3600 == transaction.statusEta);
-    assert("2dd16cb409513026fbe7defc0c6f826c2d2c65c3da993f747d09bf7dafd31093" == transaction.externalTransactionId);
+    assert("2dd16cb409513026fbe7defc0c6f826c2d2c65c3da993f747d09bf7dafd31093" ==
+        transaction.externalTransactionId);
     assert("https://youranchor.com/tx/242523523" == transaction.moreInfoUrl);
     assert("18.34" == transaction.amountIn);
     assert("18.24" == transaction.amountOut);
@@ -220,9 +229,11 @@ void main() {
     assert("2017-03-20T17:09:58Z" == transaction.completedAt);
     assert("2017-03-20T17:09:58Z" == transaction.updatedAt);
     assert("https://youranchor.com/tx/242523523" == transaction.moreInfoUrl);
-    assert("17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a" == transaction.stellarTransactionId);
+    assert("17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a" ==
+        transaction.stellarTransactionId);
     assert("1941491" == transaction.externalTransactionId);
-    assert("GBANAGOAXH5ONSBI2I6I5LHP2TCRHWMZIAMGUQH2TNKQNCOGJ7GC3ZOL" == transaction.withdrawAnchorAccount);
+    assert("GBANAGOAXH5ONSBI2I6I5LHP2TCRHWMZIAMGUQH2TNKQNCOGJ7GC3ZOL" ==
+        transaction.withdrawAnchorAccount);
     assert("186384" == transaction.withdrawMemo);
     assert("id" == transaction.withdrawMemoType);
     assert("10" == transaction.refunds!.amountRefunded);
@@ -230,7 +241,8 @@ void main() {
     List<RefundPayment> refundPayments = transaction.refunds!.payments;
     assert(refundPayments.length == 1);
     RefundPayment refundPayment = refundPayments.first;
-    assert("b9d0b2292c4e09e8eb22d036171491e87b8d2086bf8b265874c8d182cb9c9020" == refundPayment.id);
+    assert("b9d0b2292c4e09e8eb22d036171491e87b8d2086bf8b265874c8d182cb9c9020" ==
+        refundPayment.id);
     assert("stellar" == refundPayment.idType);
     assert("10" == refundPayment.amount);
     assert("5" == refundPayment.fee);
@@ -252,11 +264,13 @@ void main() {
     });
 
     SEP24TransactionRequest request = SEP24TransactionRequest();
-    request.stellarTransactionId = "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
+    request.stellarTransactionId =
+        "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
     request.jwt = jwtToken;
 
-    SEP24TransactionResponse response = await transferService.transaction(request);
-    SEP24Transaction transaction  = response.transaction;
+    SEP24TransactionResponse response =
+        await transferService.transaction(request);
+    SEP24Transaction transaction = response.transaction;
 
     assert("82fhs729f63dh0v4" == transaction.id);
     assert("withdrawal" == transaction.kind);
@@ -268,9 +282,11 @@ void main() {
     assert("2017-03-20T17:09:58Z" == transaction.completedAt);
     assert("2017-03-20T17:09:58Z" == transaction.updatedAt);
     assert("https://youranchor.com/tx/242523523" == transaction.moreInfoUrl);
-    assert("17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a" == transaction.stellarTransactionId);
+    assert("17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a" ==
+        transaction.stellarTransactionId);
     assert("1941491" == transaction.externalTransactionId);
-    assert("GBANAGOAXH5ONSBI2I6I5LHP2TCRHWMZIAMGUQH2TNKQNCOGJ7GC3ZOL" == transaction.withdrawAnchorAccount);
+    assert("GBANAGOAXH5ONSBI2I6I5LHP2TCRHWMZIAMGUQH2TNKQNCOGJ7GC3ZOL" ==
+        transaction.withdrawAnchorAccount);
     assert("186384" == transaction.withdrawMemo);
     assert("id" == transaction.withdrawMemoType);
     assert("10" == transaction.refunds!.amountRefunded);
@@ -278,7 +294,8 @@ void main() {
     List<RefundPayment> refundPayments = transaction.refunds!.payments;
     assert(refundPayments.length == 1);
     RefundPayment refundPayment = refundPayments.first;
-    assert("b9d0b2292c4e09e8eb22d036171491e87b8d2086bf8b265874c8d182cb9c9020" == refundPayment.id);
+    assert("b9d0b2292c4e09e8eb22d036171491e87b8d2086bf8b265874c8d182cb9c9020" ==
+        refundPayment.id);
     assert("stellar" == refundPayment.idType);
     assert("10" == refundPayment.amount);
     assert("5" == refundPayment.fee);
@@ -303,7 +320,8 @@ void main() {
     request.assetCode = "ETH";
     request.jwt = jwtToken;
 
-    SEP24TransactionsResponse response = await transferService.transactions(request);
+    SEP24TransactionsResponse response =
+        await transferService.transactions(request);
     List<SEP24Transaction> transactions = response.transactions;
     assert(transactions.length == 0);
   });
@@ -316,13 +334,14 @@ void main() {
     });
 
     SEP24TransactionRequest request = SEP24TransactionRequest();
-    request.stellarTransactionId = "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
+    request.stellarTransactionId =
+        "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
     request.jwt = jwtToken;
 
     bool thrown = false;
     try {
       await transferService.transaction(request);
-    } catch(e) {
+    } catch (e) {
       if (e is SEP24TransactionNotFoundException) {
         thrown = true;
       }
@@ -337,7 +356,6 @@ void main() {
       return http.Response(json.encode(mapJson), 403);
     });
 
-
     bool thrown = false;
     try {
       SEP24FeeRequest feeRequest = SEP24FeeRequest();
@@ -348,7 +366,7 @@ void main() {
       feeRequest.jwt = jwtToken;
 
       await transferService.fee(feeRequest);
-    } catch(e) {
+    } catch (e) {
       if (e is SEP24AuthenticationRequiredException) {
         thrown = true;
       }
@@ -361,7 +379,7 @@ void main() {
       request.assetCode = "USD";
       request.jwt = jwtToken;
       await transferService.deposit(request);
-    } catch(e) {
+    } catch (e) {
       if (e is SEP24AuthenticationRequiredException) {
         thrown = true;
       }
@@ -375,7 +393,7 @@ void main() {
       request.jwt = jwtToken;
 
       await transferService.withdraw(request);
-    } catch(e) {
+    } catch (e) {
       if (e is SEP24AuthenticationRequiredException) {
         thrown = true;
       }
@@ -385,10 +403,11 @@ void main() {
     thrown = false;
     try {
       SEP24TransactionRequest request = SEP24TransactionRequest();
-      request.stellarTransactionId = "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
+      request.stellarTransactionId =
+          "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
       request.jwt = jwtToken;
       await transferService.transaction(request);
-    } catch(e) {
+    } catch (e) {
       if (e is SEP24AuthenticationRequiredException) {
         thrown = true;
       }
@@ -398,10 +417,11 @@ void main() {
     thrown = false;
     try {
       SEP24TransactionRequest request = SEP24TransactionRequest();
-      request.stellarTransactionId = "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
+      request.stellarTransactionId =
+          "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
       request.jwt = jwtToken;
       await transferService.transaction(request);
-    } catch(e) {
+    } catch (e) {
       if (e is SEP24AuthenticationRequiredException) {
         thrown = true;
       }
@@ -412,10 +432,11 @@ void main() {
   test('test request error', () async {
     final transferService = TransferServerSEP24Service(serviceAddress);
     transferService.httpClient = MockClient((request) async {
-      final mapJson = {"error": "This anchor doesn't support the given currency code: ETH"};
+      final mapJson = {
+        "error": "This anchor doesn't support the given currency code: ETH"
+      };
       return http.Response(json.encode(mapJson), 400);
     });
-
 
     bool thrown = false;
     try {
@@ -427,7 +448,7 @@ void main() {
       feeRequest.jwt = jwtToken;
 
       await transferService.fee(feeRequest);
-    } catch(e) {
+    } catch (e) {
       if (e is RequestErrorException) {
         thrown = true;
       }
@@ -440,7 +461,7 @@ void main() {
       request.assetCode = "USD";
       request.jwt = jwtToken;
       await transferService.deposit(request);
-    } catch(e) {
+    } catch (e) {
       if (e is RequestErrorException) {
         thrown = true;
       }
@@ -454,7 +475,7 @@ void main() {
       request.jwt = jwtToken;
 
       await transferService.withdraw(request);
-    } catch(e) {
+    } catch (e) {
       if (e is RequestErrorException) {
         thrown = true;
       }
@@ -464,10 +485,11 @@ void main() {
     thrown = false;
     try {
       SEP24TransactionRequest request = SEP24TransactionRequest();
-      request.stellarTransactionId = "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
+      request.stellarTransactionId =
+          "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
       request.jwt = jwtToken;
       await transferService.transaction(request);
-    } catch(e) {
+    } catch (e) {
       if (e is RequestErrorException) {
         thrown = true;
       }
@@ -477,10 +499,11 @@ void main() {
     thrown = false;
     try {
       SEP24TransactionRequest request = SEP24TransactionRequest();
-      request.stellarTransactionId = "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
+      request.stellarTransactionId =
+          "17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a";
       request.jwt = jwtToken;
       await transferService.transaction(request);
-    } catch(e) {
+    } catch (e) {
       if (e is RequestErrorException) {
         thrown = true;
       }
@@ -488,4 +511,3 @@ void main() {
     assert(thrown);
   });
 }
-

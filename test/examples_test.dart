@@ -1,7 +1,7 @@
 @Timeout(const Duration(seconds: 400))
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 import 'dart:typed_data';
 import 'dart:async';
 
@@ -11,25 +11,28 @@ void main() {
   setUp(() async {});
 
   test('../examples/send_native_payment.md', () async {
-
-    KeyPair senderKeyPair =
-        KeyPair.fromSecretSeed("SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
+    KeyPair senderKeyPair = KeyPair.fromSecretSeed(
+        "SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
     // GCPYQ6HQXOQXSPJAC6N6LTLVE3IBQYS6XNBJPD56XFP24U3Q3PBDXEAB
-    String destination = "GC5Q4N6TZBTUNT3NMMUZB4Q2NCCHSGY6ESN4MV4J7Z25ZWYLCLB2K24T";
+    String destination =
+        "GC5Q4N6TZBTUNT3NMMUZB4Q2NCCHSGY6ESN4MV4J7Z25ZWYLCLB2K24T";
 
     // Load sender account data from the stellar network.
-    AccountResponse sender = await sdk.accounts.account(senderKeyPair.accountId);
+    AccountResponse sender =
+        await sdk.accounts.account(senderKeyPair.accountId);
 
     // send 100 XLM native payment from A to destination
     Transaction transaction = TransactionBuilder(sender)
-        .addOperation(PaymentOperationBuilder(destination, Asset.NATIVE, "100").build())
+        .addOperation(
+            PaymentOperationBuilder(destination, Asset.NATIVE, "100").build())
         .build();
 
     // Sign the transaction with the senders key pair.
     transaction.sign(senderKeyPair, Network.TESTNET);
 
     // Submit the transaction to the stellar network.
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
     if (response.success) {
       print("Payment sent");
     } else {
@@ -38,10 +41,9 @@ void main() {
   });
 
   test('create trustline', () async {
-
     // First we create the trustor key pair from the seed of the trustor so that we can use it to sign the transaction.
-    KeyPair trustorKeyPair =
-        KeyPair.fromSecretSeed("SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
+    KeyPair trustorKeyPair = KeyPair.fromSecretSeed(
+        "SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
 
     // Account Id of the trustor account.
     String trustorAccountId = trustorKeyPair.accountId;
@@ -50,7 +52,8 @@ void main() {
     AccountResponse trustor = await sdk.accounts.account(trustorAccountId);
 
     // Account Id of the issuer of our custom token "ONDE".
-    String issuerAccountId = "GC5Q4N6TZBTUNT3NMMUZB4Q2NCCHSGY6ESN4MV4J7Z25ZWYLCLB2K24T";
+    String issuerAccountId =
+        "GC5Q4N6TZBTUNT3NMMUZB4Q2NCCHSGY6ESN4MV4J7Z25ZWYLCLB2K24T";
 
     // Define our custom token/asset "ONDE" issued by the upper issuer account.
     Asset ondeAsset = AssetTypeCreditAlphaNum4("ONDE", issuerAccountId);
@@ -61,14 +64,16 @@ void main() {
         ChangeTrustOperationBuilder(ondeAsset, "300000");
 
     // Build the transaction.
-    Transaction transaction =
-        TransactionBuilder(trustor).addOperation(changeTrustOperation.build()).build();
+    Transaction transaction = TransactionBuilder(trustor)
+        .addOperation(changeTrustOperation.build())
+        .build();
 
     // The trustor signs the transaction.
     transaction.sign(trustorKeyPair, Network.TESTNET);
 
     // Submit the transaction.
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
 
     if (!response.success) {
       print("something went wrong.");
@@ -79,15 +84,17 @@ void main() {
     // Now we can send 1000 ONDE from the issuer to the trustor.
 
     // First we create the issuer account key pair from it's seed so that we can use it to sign the transaction.
-    KeyPair issuerKeyPair =
-        KeyPair.fromSecretSeed("SCCVA6URINLOMDPLK2ATBKKJR3MIUOXSWXVVR5JYOKECCAIQIENCH6SI");
+    KeyPair issuerKeyPair = KeyPair.fromSecretSeed(
+        "SCCVA6URINLOMDPLK2ATBKKJR3MIUOXSWXVVR5JYOKECCAIQIENCH6SI");
 
     // Load the issuer's account details including its current sequence number.
     AccountResponse issuer = await sdk.accounts.account(issuerAccountId);
 
     // Send 1000 ONDE non native payment from the issuer to the trustor
     transaction = TransactionBuilder(issuer)
-        .addOperation(PaymentOperationBuilder(trustorAccountId, ondeAsset, "1000").build())
+        .addOperation(
+            PaymentOperationBuilder(trustorAccountId, ondeAsset, "1000")
+                .build())
         .build();
 
     // The issuer signs the transaction.
@@ -115,14 +122,14 @@ void main() {
 
   test('send non native payment', () async {
     // Create the key pairs of issuer, sender and receiver from their secret seeds. We will need them for signing.
-    KeyPair issuerKeyPair =
-        KeyPair.fromSecretSeed("SCCVA6URINLOMDPLK2ATBKKJR3MIUOXSWXVVR5JYOKECCAIQIENCH6SI");
+    KeyPair issuerKeyPair = KeyPair.fromSecretSeed(
+        "SCCVA6URINLOMDPLK2ATBKKJR3MIUOXSWXVVR5JYOKECCAIQIENCH6SI");
     // GC5Q4N6TZBTUNT3NMMUZB4Q2NCCHSGY6ESN4MV4J7Z25ZWYLCLB2K24T
-    KeyPair senderKeyPair =
-        KeyPair.fromSecretSeed("SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
+    KeyPair senderKeyPair = KeyPair.fromSecretSeed(
+        "SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
     // GCPYQ6HQXOQXSPJAC6N6LTLVE3IBQYS6XNBJPD56XFP24U3Q3PBDXEAB
-    KeyPair receiverKeyPair =
-        KeyPair.fromSecretSeed("SADG3JJ2FAX64OEPB2AWW7RCFESNOXJGCQEXM4SJ5IV46QC7DFYFQ2WA");
+    KeyPair receiverKeyPair = KeyPair.fromSecretSeed(
+        "SADG3JJ2FAX64OEPB2AWW7RCFESNOXJGCQEXM4SJ5IV46QC7DFYFQ2WA");
     // GDTOAMZWJMI3FYAVJ4JRKEEISNJ4PND3GI3LJQBVJC4AH5XVU5QG4FMJ
 
     // Account Ids.
@@ -136,13 +143,15 @@ void main() {
     // Prepare a change trust operation so that we can create trustlines for both, the sender and receiver
     // Both need to trust the ONDE asset issued by the issuer account so that they can hold the token/asset.
     // Trust limit is 10000.
-    ChangeTrustOperationBuilder chOp = ChangeTrustOperationBuilder(ondeAsset, "10000");
+    ChangeTrustOperationBuilder chOp =
+        ChangeTrustOperationBuilder(ondeAsset, "10000");
 
     // Load the sender account data from the stellar network so that we have the current sequence number.
     AccountResponse sender = await sdk.accounts.account(senderAccountId);
 
     // Build the transaction for the trustline (sender trusts custom asset).
-    Transaction transaction = TransactionBuilder(sender).addOperation(chOp.build()).build();
+    Transaction transaction =
+        TransactionBuilder(sender).addOperation(chOp.build()).build();
 
     // The sender signs the transaction.
     transaction.sign(senderKeyPair, Network.TESTNET);
@@ -154,7 +163,8 @@ void main() {
     AccountResponse receiver = await sdk.accounts.account(receiverAccountId);
 
     // Build the transaction for the trustline (receiver trusts custom asset).
-    transaction = TransactionBuilder(receiver).addOperation(chOp.build()).build();
+    transaction =
+        TransactionBuilder(receiver).addOperation(chOp.build()).build();
 
     // The receiver signs the transaction.
     transaction.sign(receiverKeyPair, Network.TESTNET);
@@ -167,7 +177,9 @@ void main() {
 
     // Send 500 ONDE non native payment from issuer to sender.
     transaction = TransactionBuilder(issuer)
-        .addOperation(PaymentOperationBuilder(receiverAccountId, ondeAsset, "500").build())
+        .addOperation(
+            PaymentOperationBuilder(receiverAccountId, ondeAsset, "500")
+                .build())
         .build();
 
     // The issuer signs the transaction.
@@ -179,7 +191,9 @@ void main() {
     // The sender now has 500 ONDE and can send to the receiver.
     // Send 200 ONDE (non native payment) from sender to receiver
     transaction = TransactionBuilder(sender)
-        .addOperation(PaymentOperationBuilder(receiverAccountId, ondeAsset, "200").build())
+        .addOperation(
+            PaymentOperationBuilder(receiverAccountId, ondeAsset, "200")
+                .build())
         .build();
 
     // The sender signs the transaction.
@@ -224,10 +238,16 @@ void main() {
     // Fund sender, middleman and receiver from our issuer account.
     // Create the accounts for our example.
     Transaction transaction = TransactionBuilder(issuer)
-        .addOperation(CreateAccountOperationBuilder(senderAccountId, "10").build())
-        .addOperation(CreateAccountOperationBuilder(firstMiddlemanAccountId, "10").build())
-        .addOperation(CreateAccountOperationBuilder(secondMiddlemanAccountId, "10").build())
-        .addOperation(CreateAccountOperationBuilder(receiverAccountId, "10").build())
+        .addOperation(
+            CreateAccountOperationBuilder(senderAccountId, "10").build())
+        .addOperation(
+            CreateAccountOperationBuilder(firstMiddlemanAccountId, "10")
+                .build())
+        .addOperation(
+            CreateAccountOperationBuilder(secondMiddlemanAccountId, "10")
+                .build())
+        .addOperation(
+            CreateAccountOperationBuilder(receiverAccountId, "10").build())
         .build();
 
     // Sign the transaction.
@@ -238,8 +258,10 @@ void main() {
 
     // Load the data of the accounts so that we can create the trustlines in the next step.
     AccountResponse sender = await sdk.accounts.account(senderAccountId);
-    AccountResponse firstMiddleman = await sdk.accounts.account(firstMiddlemanAccountId);
-    AccountResponse secondMiddleman = await sdk.accounts.account(secondMiddlemanAccountId);
+    AccountResponse firstMiddleman =
+        await sdk.accounts.account(firstMiddlemanAccountId);
+    AccountResponse secondMiddleman =
+        await sdk.accounts.account(secondMiddlemanAccountId);
     AccountResponse receiver = await sdk.accounts.account(receiverAccountId);
 
     // Define our custom tokens.
@@ -248,10 +270,12 @@ void main() {
     Asset ecoAsset = AssetTypeCreditAlphaNum4("ECO", issuerAccoutId);
 
     // Let the sender trust ONDE.
-    ChangeTrustOperationBuilder ctIOMOp = ChangeTrustOperationBuilder(troyAsset, "200999");
+    ChangeTrustOperationBuilder ctIOMOp =
+        ChangeTrustOperationBuilder(troyAsset, "200999");
 
     // Build the transaction.
-    transaction = TransactionBuilder(sender).addOperation(ctIOMOp.build()).build();
+    transaction =
+        TransactionBuilder(sender).addOperation(ctIOMOp.build()).build();
 
     // Sign the transaction.
     transaction.sign(senderKeyPair, Network.TESTNET);
@@ -260,7 +284,8 @@ void main() {
     await sdk.submitTransaction(transaction);
 
     // Let the first middleman trust both ONDE and MOON.
-    ChangeTrustOperationBuilder ctMOONOp = ChangeTrustOperationBuilder(moonAsset, "200999");
+    ChangeTrustOperationBuilder ctMOONOp =
+        ChangeTrustOperationBuilder(moonAsset, "200999");
 
     // Build the transaction.
     transaction = TransactionBuilder(firstMiddleman)
@@ -275,7 +300,8 @@ void main() {
     await sdk.submitTransaction(transaction);
 
     // Let the second middleman trust both MOON and ECO.
-    ChangeTrustOperationBuilder ctECOOp = ChangeTrustOperationBuilder(ecoAsset, "200999");
+    ChangeTrustOperationBuilder ctECOOp =
+        ChangeTrustOperationBuilder(ecoAsset, "200999");
 
     // Build the transaction.
     transaction = TransactionBuilder(secondMiddleman)
@@ -290,7 +316,8 @@ void main() {
     await sdk.submitTransaction(transaction);
 
     // Let the receiver trust ECO.
-    transaction = TransactionBuilder(receiver).addOperation(ctECOOp.build()).build();
+    transaction =
+        TransactionBuilder(receiver).addOperation(ctECOOp.build()).build();
 
     // Sign.
     transaction.sign(receiverKeyPair, Network.TESTNET);
@@ -303,9 +330,14 @@ void main() {
     // Send 100 MOON to first middleman.
     // Send 100 ECO to second middleman.
     transaction = TransactionBuilder(issuer)
-        .addOperation(PaymentOperationBuilder(senderAccountId, troyAsset, "100").build())
-        .addOperation(PaymentOperationBuilder(firstMiddlemanAccountId, moonAsset, "100").build())
-        .addOperation(PaymentOperationBuilder(secondMiddlemanAccountId, ecoAsset, "100").build())
+        .addOperation(
+            PaymentOperationBuilder(senderAccountId, troyAsset, "100").build())
+        .addOperation(
+            PaymentOperationBuilder(firstMiddlemanAccountId, moonAsset, "100")
+                .build())
+        .addOperation(
+            PaymentOperationBuilder(secondMiddlemanAccountId, ecoAsset, "100")
+                .build())
         .build();
 
     // Sign.
@@ -319,7 +351,8 @@ void main() {
         ManageSellOfferOperation(moonAsset, troyAsset, "100", "0.5", "0");
 
     // Build the transaction.
-    transaction = TransactionBuilder(firstMiddleman).addOperation(sellOfferOp).build();
+    transaction =
+        TransactionBuilder(firstMiddleman).addOperation(sellOfferOp).build();
 
     // Sign.
     transaction.sign(firstMiddlemanKeyPair, Network.TESTNET);
@@ -328,10 +361,12 @@ void main() {
     await sdk.submitTransaction(transaction);
 
     // Now let the second middleman offer ECO for MOON: 1 MOON = 2 ECO. Offered Amount: 100 ECO.
-    sellOfferOp = ManageSellOfferOperation(ecoAsset, moonAsset, "100", "0.5", "0");
+    sellOfferOp =
+        ManageSellOfferOperation(ecoAsset, moonAsset, "100", "0.5", "0");
 
     // Build the transaction.
-    transaction = TransactionBuilder(secondMiddleman).addOperation(sellOfferOp).build();
+    transaction =
+        TransactionBuilder(secondMiddleman).addOperation(sellOfferOp).build();
 
     // Sign.
     transaction.sign(secondMiddlemanKeyPair, Network.TESTNET);
@@ -355,7 +390,8 @@ void main() {
 
     // First path payment strict send. Send exactly 10 ONDE, receive minimum 38 ECO (it will be 40).
     PathPaymentStrictSendOperation strictSend =
-        PathPaymentStrictSendOperationBuilder(troyAsset, "10", receiverAccountId, ecoAsset, "38")
+        PathPaymentStrictSendOperationBuilder(
+                troyAsset, "10", receiverAccountId, ecoAsset, "38")
             .setPath(path)
             .build();
 
@@ -371,7 +407,8 @@ void main() {
     // Check if the receiver received the ECOs.
     receiver = await sdk.accounts.account(receiverAccountId);
     for (Balance balance in receiver.balances) {
-      if (balance.assetType != Asset.TYPE_NATIVE && balance.assetCode == "ECO") {
+      if (balance.assetType != Asset.TYPE_NATIVE &&
+          balance.assetCode == "ECO") {
         print("Receiver received ${double.parse(balance.balance)} ECO");
         break;
       }
@@ -391,12 +428,14 @@ void main() {
 
     // The sender sends max 2 ONDE.
     PathPaymentStrictReceiveOperation strictReceive =
-        PathPaymentStrictReceiveOperationBuilder(troyAsset, "2", receiverAccountId, ecoAsset, "8")
+        PathPaymentStrictReceiveOperationBuilder(
+                troyAsset, "2", receiverAccountId, ecoAsset, "8")
             .setPath(path)
             .build();
 
     // Build the transaction.
-    transaction = TransactionBuilder(sender).addOperation(strictReceive).build();
+    transaction =
+        TransactionBuilder(sender).addOperation(strictReceive).build();
 
     // Sign.
     transaction.sign(senderKeyPair, Network.TESTNET);
@@ -407,7 +446,8 @@ void main() {
     // Check id the reciver received the ECOs.
     receiver = await sdk.accounts.account(receiverAccountId);
     for (Balance balance in receiver.balances) {
-      if (balance.assetType != Asset.TYPE_NATIVE && balance.assetCode == "ECO") {
+      if (balance.assetType != Asset.TYPE_NATIVE &&
+          balance.assetCode == "ECO") {
         print("Receiver has ${double.parse(balance.balance)} ECO");
         break;
       }
@@ -432,8 +472,8 @@ void main() {
     StellarSDK sdk = StellarSDK.TESTNET;
 
     // Build a key pair from the seed of an existing account. We will need it for signing.
-    KeyPair existingAccountKeyPair =
-        KeyPair.fromSecretSeed("SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
+    KeyPair existingAccountKeyPair = KeyPair.fromSecretSeed(
+        "SCPIYARVXYX57PKJDAGRZOOK5PVGP42J3CT3WKERQB25R5F3EXUJFOLS");
 
     // Existing account id.
     String existingAccountId = existingAccountKeyPair.accountId;
@@ -442,11 +482,14 @@ void main() {
     KeyPair newAccountKeyPair = KeyPair.random();
 
     // Load the data of the existing account so that we receive it's current sequence number.
-    AccountResponse existingAccount = await sdk.accounts.account(existingAccountId);
+    AccountResponse existingAccount =
+        await sdk.accounts.account(existingAccountId);
 
     // Build a transaction containing a create account operation to create the  account.
     Transaction transaction = TransactionBuilder(existingAccount)
-        .addOperation(CreateAccountOperationBuilder(newAccountKeyPair.accountId, "10").build())
+        .addOperation(
+            CreateAccountOperationBuilder(newAccountKeyPair.accountId, "10")
+                .build())
         .build();
 
     // Sign the transaction with the key pair of the existing account.
@@ -473,19 +516,22 @@ void main() {
     await FriendBot.fundTestAccount(accountYId);
 
     // Prepare the operation for merging account Y into account X.
-    AccountMergeOperationBuilder accMergeOp = AccountMergeOperationBuilder(accountXId);
+    AccountMergeOperationBuilder accMergeOp =
+        AccountMergeOperationBuilder(accountXId);
 
     // Load the data of account Y so that we have it's current sequence number.
     AccountResponse accountY = await sdk.accounts.account(accountYId);
 
     // Build the transaction to merge account Y into account X.
-    Transaction transaction = TransactionBuilder(accountY).addOperation(accMergeOp.build()).build();
+    Transaction transaction =
+        TransactionBuilder(accountY).addOperation(accMergeOp.build()).build();
 
     // Account Y signs the transaction - R.I.P :)
     transaction.sign(keyPairY, Network.TESTNET);
 
     // Submit the transaction.
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
 
     if (response.success) {
       print("successfully merged");
@@ -528,11 +574,13 @@ void main() {
     int startSequence = account.sequenceNumber;
 
     // Prepare the bump sequence operation to bump the sequence number to current + 10.
-    BumpSequenceOperationBuilder bumpSequenceOpB = BumpSequenceOperationBuilder(startSequence + 10);
+    BumpSequenceOperationBuilder bumpSequenceOpB =
+        BumpSequenceOperationBuilder(startSequence + 10);
 
     // Prepare the transaction.
-    Transaction transaction =
-        TransactionBuilder(account).addOperation(bumpSequenceOpB.build()).build();
+    Transaction transaction = TransactionBuilder(account)
+        .addOperation(bumpSequenceOpB.build())
+        .build();
 
     // Sign the transaction.
     transaction.sign(accountKeyPair, Network.TESTNET);
@@ -577,8 +625,9 @@ void main() {
         ManageDataOperationBuilder(key, valueBytes);
 
     // Create the transaction.
-    Transaction transaction =
-        TransactionBuilder(account).addOperation(manageDataOperationBuilder.build()).build();
+    Transaction transaction = TransactionBuilder(account)
+        .addOperation(manageDataOperationBuilder.build())
+        .build();
 
     // Sign the transaction.
     transaction.sign(keyPair, Network.TESTNET);
@@ -606,8 +655,9 @@ void main() {
     manageDataOperationBuilder = ManageDataOperationBuilder(key, null);
 
     // Prepare the transaction.
-    transaction =
-        TransactionBuilder(account).addOperation(manageDataOperationBuilder.build()).build();
+    transaction = TransactionBuilder(account)
+        .addOperation(manageDataOperationBuilder.build())
+        .build();
 
     // Sign the transaction.
     transaction.sign(keyPair, Network.TESTNET);
@@ -638,8 +688,10 @@ void main() {
 
     // Create the issuer account.
     AccountResponse buyerAccount = await sdk.accounts.account(buyerAccountId);
-    CreateAccountOperationBuilder caob = CreateAccountOperationBuilder(issuerAccountId, "10");
-    Transaction transaction = TransactionBuilder(buyerAccount).addOperation(caob.build()).build();
+    CreateAccountOperationBuilder caob =
+        CreateAccountOperationBuilder(issuerAccountId, "10");
+    Transaction transaction =
+        TransactionBuilder(buyerAccount).addOperation(caob.build()).build();
     transaction.sign(buyerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
 
@@ -647,7 +699,8 @@ void main() {
     Asset astroDollar = AssetTypeCreditAlphaNum12("ASTRO", issuerAccountId);
 
     // Create a trustline for the buyer account.
-    ChangeTrustOperation cto = ChangeTrustOperationBuilder(astroDollar, "10000").build();
+    ChangeTrustOperation cto =
+        ChangeTrustOperationBuilder(astroDollar, "10000").build();
     transaction = TransactionBuilder(buyerAccount).addOperation(cto).build();
     transaction.sign(buyerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
@@ -658,8 +711,9 @@ void main() {
     String price = "0.5"; // Price of 1 unit of buying in terms of selling
 
     // Create the manage buy offer operation. Buying: 100 ASTRO for 50 XLM (price = 0.5 => Price of 1 unit of buying in terms of selling)
-    ManageBuyOfferOperation ms =
-        ManageBuyOfferOperationBuilder(Asset.NATIVE, astroDollar, amountBuying, price).build();
+    ManageBuyOfferOperation ms = ManageBuyOfferOperationBuilder(
+            Asset.NATIVE, astroDollar, amountBuying, price)
+        .build();
     // Create the transaction.
     transaction = TransactionBuilder(buyerAccount).addOperation(ms).build();
     // Sign the transaction.
@@ -668,7 +722,8 @@ void main() {
     await sdk.submitTransaction(transaction);
 
     // Now let's load the offers of our account to see if the offer has been created.
-    Page<OfferResponse> offers = await sdk.offers.forAccount(buyerAccountId).execute();
+    Page<OfferResponse> offers =
+        await sdk.offers.forAccount(buyerAccountId).execute();
     OfferResponse offer = offers.records!.first;
 
     String? buyingAssetCode = offer.buying is AssetTypeCreditAlphaNum
@@ -693,7 +748,8 @@ void main() {
     price = "0.3";
 
     // Build the manage buy offer operation
-    ms = ManageBuyOfferOperationBuilder(Asset.NATIVE, astroDollar, amountBuying, price)
+    ms = ManageBuyOfferOperationBuilder(
+            Asset.NATIVE, astroDollar, amountBuying, price)
         .setOfferId(offerId) // provide the offerId of the offer to be modified.
         .build();
 
@@ -726,7 +782,8 @@ void main() {
     amountBuying = "0";
 
     // Create the operation.
-    ms = ManageBuyOfferOperationBuilder(Asset.NATIVE, astroDollar, amountBuying, price)
+    ms = ManageBuyOfferOperationBuilder(
+            Asset.NATIVE, astroDollar, amountBuying, price)
         .setOfferId(offerId) // Provide the id of the offer to be deleted.
         .build();
 
@@ -760,8 +817,10 @@ void main() {
 
     // Create issuer account.
     AccountResponse sellerAccount = await sdk.accounts.account(sellerAccountId);
-    CreateAccountOperation co = CreateAccountOperationBuilder(issuerAccountId, "10").build();
-    Transaction transaction = TransactionBuilder(sellerAccount).addOperation(co).build();
+    CreateAccountOperation co =
+        CreateAccountOperationBuilder(issuerAccountId, "10").build();
+    Transaction transaction =
+        TransactionBuilder(sellerAccount).addOperation(co).build();
     transaction.sign(sellerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
 
@@ -772,13 +831,15 @@ void main() {
     Asset moonDollar = AssetTypeCreditAlphaNum4("MOON", issuerAccountId);
 
     // Let the seller trust our custom asset.
-    ChangeTrustOperation cto = ChangeTrustOperationBuilder(moonDollar, "10000").build();
+    ChangeTrustOperation cto =
+        ChangeTrustOperationBuilder(moonDollar, "10000").build();
     transaction = TransactionBuilder(sellerAccount).addOperation(cto).build();
     transaction.sign(sellerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
 
     // Send 2000 MOON asset to the seller account.
-    PaymentOperation po = PaymentOperationBuilder(sellerAccountId, moonDollar, "2000").build();
+    PaymentOperation po =
+        PaymentOperationBuilder(sellerAccountId, moonDollar, "2000").build();
     transaction = TransactionBuilder(issuerAccount).addOperation(po).build();
     transaction.sign(issuerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
@@ -789,8 +850,9 @@ void main() {
     String price = "0.5"; // Price of 1 unit of selling in terms of buying.
 
     // Create the manage sell offer operation. Selling: 100 MOON for 50 XLM (price = 0.5 => Price of 1 unit of selling in terms of buying.)
-    ManageSellOfferOperation ms =
-        ManageSellOfferOperationBuilder(moonDollar, Asset.NATIVE, amountSelling, price).build();
+    ManageSellOfferOperation ms = ManageSellOfferOperationBuilder(
+            moonDollar, Asset.NATIVE, amountSelling, price)
+        .build();
     // Build the transaction.
     transaction = TransactionBuilder(sellerAccount).addOperation(ms).build();
     // Sign.
@@ -799,7 +861,8 @@ void main() {
     await sdk.submitTransaction(transaction);
 
     // Now let's load the offers of our account to see if the offer has been created.
-    Page<OfferResponse> offers = await sdk.offers.forAccount(sellerAccountId).execute();
+    Page<OfferResponse> offers =
+        await sdk.offers.forAccount(sellerAccountId).execute();
     OfferResponse offer = offers.records!.first;
 
     String? sellingAssetCode = offer.selling is AssetTypeCreditAlphaNum
@@ -823,7 +886,8 @@ void main() {
     price = "0.3";
 
     // Create the manage sell offer operation.
-    ms = ManageSellOfferOperationBuilder(moonDollar, Asset.NATIVE, amountSelling, price)
+    ms = ManageSellOfferOperationBuilder(
+            moonDollar, Asset.NATIVE, amountSelling, price)
         .setOfferId(offerId) // Provide the id of the offer to be modified.
         .build();
     // Build the transaction.
@@ -853,7 +917,8 @@ void main() {
     // And now let's delete the offer. To delete it, we must set the amount to zero.
     amountSelling = "0";
     // Create the operation.
-    ms = ManageSellOfferOperationBuilder(moonDollar, Asset.NATIVE, amountSelling, price)
+    ms = ManageSellOfferOperationBuilder(
+            moonDollar, Asset.NATIVE, amountSelling, price)
         .setOfferId(offerId) // Provide the id of the offer to be deleted.
         .build();
     // Build the transaction.
@@ -884,8 +949,10 @@ void main() {
 
     // Create issuer account.
     AccountResponse sellerAccount = await sdk.accounts.account(sellerAccountId);
-    CreateAccountOperation co = CreateAccountOperationBuilder(issuerAccountId, "10").build();
-    Transaction transaction = TransactionBuilder(sellerAccount).addOperation(co).build();
+    CreateAccountOperation co =
+        CreateAccountOperationBuilder(issuerAccountId, "10").build();
+    Transaction transaction =
+        TransactionBuilder(sellerAccount).addOperation(co).build();
     transaction.sign(sellerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
 
@@ -896,13 +963,15 @@ void main() {
     Asset marsDollar = AssetTypeCreditAlphaNum4("MARS", issuerAccountId);
 
     // Let the seller account trust our issuer and custom asset.
-    ChangeTrustOperation cto = ChangeTrustOperationBuilder(marsDollar, "10000").build();
+    ChangeTrustOperation cto =
+        ChangeTrustOperationBuilder(marsDollar, "10000").build();
     transaction = TransactionBuilder(sellerAccount).addOperation(cto).build();
     transaction.sign(sellerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
 
     // Send a couple of custom asset MARS funds from the issuer to the seller account so that the seller can offer them.
-    PaymentOperation po = PaymentOperationBuilder(sellerAccountId, marsDollar, "2000").build();
+    PaymentOperation po =
+        PaymentOperationBuilder(sellerAccountId, marsDollar, "2000").build();
     transaction = TransactionBuilder(issuerAccount).addOperation(po).build();
     transaction.sign(issuerKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
@@ -914,7 +983,8 @@ void main() {
 
     // Create the passive sell offer operation. Selling: 100 MARS for 50 XLM (price = 0.5 => Price of 1 unit of selling in terms of buying.)
     CreatePassiveSellOfferOperation cpso =
-        CreatePassiveSellOfferOperationBuilder(marsDollar, Asset.NATIVE, amountSelling, price)
+        CreatePassiveSellOfferOperationBuilder(
+                marsDollar, Asset.NATIVE, amountSelling, price)
             .build();
     // Build the transaction.
     transaction = TransactionBuilder(sellerAccount).addOperation(cpso).build();
@@ -924,7 +994,8 @@ void main() {
     await sdk.submitTransaction(transaction);
 
     // Now let's load the offers of our account to see if the offer has been created.
-    Page<OfferResponse> offers = (await sdk.offers.forAccount(sellerAccountId).execute());
+    Page<OfferResponse> offers =
+        (await sdk.offers.forAccount(sellerAccountId).execute());
     OfferResponse offer = offers.records!.first;
 
     String? sellingAssetCode = offer.selling is AssetTypeCreditAlphaNum
@@ -949,10 +1020,10 @@ void main() {
     price = "0.3";
 
     // To modify the offer, we are going to use the mange sell offer operation.
-    ManageSellOfferOperation ms =
-        ManageSellOfferOperationBuilder(marsDollar, Asset.NATIVE, amountSelling, price)
-            .setOfferId(offerId) // set id of the offer to be modified.
-            .build();
+    ManageSellOfferOperation ms = ManageSellOfferOperationBuilder(
+            marsDollar, Asset.NATIVE, amountSelling, price)
+        .setOfferId(offerId) // set id of the offer to be modified.
+        .build();
     // Build the transaction.
     transaction = TransactionBuilder(sellerAccount).addOperation(ms).build();
     // Sign.
@@ -981,7 +1052,8 @@ void main() {
     amountSelling = "0";
 
     // To delete the offer we can use the manage sell offer operation.
-    ms = ManageSellOfferOperationBuilder(marsDollar, Asset.NATIVE, amountSelling, price)
+    ms = ManageSellOfferOperationBuilder(
+            marsDollar, Asset.NATIVE, amountSelling, price)
         .setOfferId(offerId) // Set the id of the offer to be deleted.
         .build();
     // Build the transaction.
@@ -1011,11 +1083,14 @@ void main() {
     await FriendBot.fundTestAccount(trustorAccountId);
 
     // Load the trustor account so that we can later create the trustline.
-    AccountResponse trustorAccount = await sdk.accounts.account(trustorAccountId);
+    AccountResponse trustorAccount =
+        await sdk.accounts.account(trustorAccountId);
 
     // Create the issuer account.
-    CreateAccountOperation cao = CreateAccountOperationBuilder(issuerAccountId, "10").build();
-    Transaction transaction = TransactionBuilder(trustorAccount).addOperation(cao).build();
+    CreateAccountOperation cao =
+        CreateAccountOperationBuilder(issuerAccountId, "10").build();
+    Transaction transaction =
+        TransactionBuilder(trustorAccount).addOperation(cao).build();
     transaction.sign(trustorKeypair, Network.TESTNET);
     await sdk.submitTransaction(transaction);
 
@@ -1026,7 +1101,8 @@ void main() {
     // Create the trustline. Limit: 10000 ASTRO.
     String limit = "10000";
     // Build the operation.
-    ChangeTrustOperation cto = ChangeTrustOperationBuilder(astroDollar, limit).build();
+    ChangeTrustOperation cto =
+        ChangeTrustOperationBuilder(astroDollar, limit).build();
     transaction = TransactionBuilder(trustorAccount).addOperation(cto).build();
     // Sign.
     transaction.sign(trustorKeypair, Network.TESTNET);
@@ -1039,7 +1115,9 @@ void main() {
     // Check if the trustline exists.
     for (Balance balance in trustorAccount.balances) {
       if (balance.assetCode == assetCode) {
-        print("Trustline for " + assetCode + " found. Limit: ${double.parse(balance.limit!)}");
+        print("Trustline for " +
+            assetCode +
+            " found. Limit: ${double.parse(balance.limit!)}");
         // Trustline for ASTRO found. Limit: 10000.0
         break;
       }
@@ -1063,7 +1141,9 @@ void main() {
     // Check.
     for (Balance balance in trustorAccount.balances) {
       if (balance.assetCode == assetCode) {
-        print("Trustline for " + assetCode + " found. Limit: ${double.parse(balance.limit!)}");
+        print("Trustline for " +
+            assetCode +
+            " found. Limit: ${double.parse(balance.limit!)}");
         // Trustline for ASTRO found. Limit: 40000.0
         break;
       }
@@ -1112,13 +1192,17 @@ void main() {
     await FriendBot.fundTestAccount(trustorAccountId);
 
     // Load trustor account, we will need it later to create the trustline.
-    AccountResponse trustorAccount = await sdk.accounts.account(trustorAccountId);
+    AccountResponse trustorAccount =
+        await sdk.accounts.account(trustorAccountId);
 
     // Create the issuer account.
-    CreateAccountOperation cao = CreateAccountOperationBuilder(issuerAccountId, "10").build();
-    Transaction transaction = TransactionBuilder(trustorAccount).addOperation(cao).build();
+    CreateAccountOperation cao =
+        CreateAccountOperationBuilder(issuerAccountId, "10").build();
+    Transaction transaction =
+        TransactionBuilder(trustorAccount).addOperation(cao).build();
     transaction.sign(trustorKeypair, Network.TESTNET);
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
 
     // Load the issuer account.
     AccountResponse issuerAccount = await sdk.accounts.account(issuerAccountId);
@@ -1126,7 +1210,8 @@ void main() {
     SetOptionsOperationBuilder sopb = SetOptionsOperationBuilder();
     sopb.setSetFlags(3); // Auth required, auth revocable
     // Build the transaction.
-    transaction = TransactionBuilder(issuerAccount).addOperation(sopb.build()).build();
+    transaction =
+        TransactionBuilder(issuerAccount).addOperation(sopb.build()).build();
     // Sign.
     transaction.sign(issuerKeypair, Network.TESTNET);
     // Submit.
@@ -1146,7 +1231,8 @@ void main() {
 
     // Build the trustline.
     String limit = "10000";
-    ChangeTrustOperation cto = ChangeTrustOperationBuilder(astroDollar, limit).build();
+    ChangeTrustOperation cto =
+        ChangeTrustOperationBuilder(astroDollar, limit).build();
     transaction = TransactionBuilder(trustorAccount).addOperation(cto).build();
     transaction.sign(trustorKeypair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
@@ -1162,7 +1248,8 @@ void main() {
 
     // Now lets try to send some custom asset funds to the trustor account.
     // This should not work, because the issuer must authorize the trustline first.
-    PaymentOperation po = PaymentOperationBuilder(trustorAccountId, astroDollar, "100").build();
+    PaymentOperation po =
+        PaymentOperationBuilder(trustorAccountId, astroDollar, "100").build();
     transaction = TransactionBuilder(issuerAccount).addOperation(po).build();
     transaction.sign(issuerKeypair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
@@ -1174,7 +1261,8 @@ void main() {
     // Now let's authorize the trustline.
     // Build the allow trust operation. Set the authorized flag to 1.
     AllowTrustOperation aop =
-        AllowTrustOperationBuilder(trustorAccountId, assetCode, 1).build(); // authorize
+        AllowTrustOperationBuilder(trustorAccountId, assetCode, 1)
+            .build(); // authorize
     transaction = TransactionBuilder(issuerAccount).addOperation(aop).build();
     transaction.sign(issuerKeypair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
@@ -1193,7 +1281,8 @@ void main() {
     String amountSelling = "100";
     String price = "0.5";
     CreatePassiveSellOfferOperation cpso =
-        CreatePassiveSellOfferOperationBuilder(astroDollar, Asset.NATIVE, amountSelling, price)
+        CreatePassiveSellOfferOperationBuilder(
+                astroDollar, Asset.NATIVE, amountSelling, price)
             .build();
     transaction = TransactionBuilder(trustorAccount).addOperation(cpso).build();
     transaction.sign(trustorKeypair, Network.TESTNET);
@@ -1209,7 +1298,8 @@ void main() {
 
     // Now lets remove the authorization. To do so, we set the authorized flag to 0.
     // This should also delete the offer.
-    aop = AllowTrustOperationBuilder(trustorAccountId, assetCode, 0).build(); // not authorized
+    aop = AllowTrustOperationBuilder(trustorAccountId, assetCode, 0)
+        .build(); // not authorized
     transaction = TransactionBuilder(issuerAccount).addOperation(aop).build();
     transaction.sign(issuerKeypair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
@@ -1221,13 +1311,15 @@ void main() {
     }
 
     // Now, let's authorize the trustline again and then authorize it only to maintain liabilities.
-    aop = AllowTrustOperationBuilder(trustorAccountId, assetCode, 1).build(); // authorize
+    aop = AllowTrustOperationBuilder(trustorAccountId, assetCode, 1)
+        .build(); // authorize
     transaction = TransactionBuilder(issuerAccount).addOperation(aop).build();
     transaction.sign(issuerKeypair, Network.TESTNET);
     response = await sdk.submitTransaction(transaction);
 
     // Create the offer again.
-    cpso = CreatePassiveSellOfferOperationBuilder(astroDollar, Asset.NATIVE, amountSelling, price)
+    cpso = CreatePassiveSellOfferOperationBuilder(
+            astroDollar, Asset.NATIVE, amountSelling, price)
         .build();
     transaction = TransactionBuilder(trustorAccount).addOperation(cpso).build();
     transaction.sign(trustorKeypair, Network.TESTNET);
@@ -1279,12 +1371,16 @@ void main() {
 
     // Subscribe to listen for payments for account A.
     // If we set the cursor to "now" it will not receive old events such as the create account operation.
-    StreamSubscription subscription =
-        sdk.payments.forAccount(accountAId).cursor("now").stream().listen((response) {
+    StreamSubscription subscription = sdk.payments
+        .forAccount(accountAId)
+        .cursor("now")
+        .stream()
+        .listen((response) {
       if (response is PaymentOperationResponse) {
         switch (response.assetType) {
           case Asset.TYPE_NATIVE:
-            print("Payment of ${response.amount} XLM from ${response.sourceAccount} received.");
+            print(
+                "Payment of ${response.amount} XLM from ${response.sourceAccount} received.");
             break;
           default:
             print(
@@ -1295,7 +1391,8 @@ void main() {
 
     // Send 10 XLM from account B to account A.
     Transaction transaction = TransactionBuilder(accountB)
-        .addOperation(PaymentOperationBuilder(accountAId, Asset.NATIVE, "10").build())
+        .addOperation(
+            PaymentOperationBuilder(accountAId, Asset.NATIVE, "10").build())
         .build();
     transaction.sign(keyPairB, Network.TESTNET);
     await sdk.submitTransaction(transaction);
@@ -1327,7 +1424,8 @@ void main() {
 
     // Build the inner transaction which will create the the destination account by using the source account.
     Transaction innerTx = TransactionBuilder(sourceAccount)
-        .addOperation(CreateAccountOperationBuilder(destinationId, "10").build())
+        .addOperation(
+            CreateAccountOperationBuilder(destinationId, "10").build())
         .build();
 
     // Sign the inner transaction with the source account key pair.
@@ -1335,14 +1433,17 @@ void main() {
 
     // Build the fee bump transaction to let the payer account pay the fee for the inner transaction.
     // The base fee for the fee bump transaction must be higher than the fee of the inner transaction.
-    FeeBumpTransaction feeBump =
-        FeeBumpTransactionBuilder(innerTx).setBaseFee(200).setFeeAccount(payerId).build();
+    FeeBumpTransaction feeBump = FeeBumpTransactionBuilder(innerTx)
+        .setBaseFee(200)
+        .setFeeAccount(payerId)
+        .build();
 
     // Sign the fee bump transaction with the
     feeBump.sign(payerKeyPair, Network.TESTNET);
 
     // Submit the fee bump transaction containing the inner transaction.
-    SubmitTransactionResponse response = await sdk.submitFeeBumpTransaction(feeBump);
+    SubmitTransactionResponse response =
+        await sdk.submitFeeBumpTransaction(feeBump);
 
     // Let's check if the destination account has been created and received the funds.
     AccountResponse destination = await sdk.accounts.account(destinationId);
@@ -1355,13 +1456,16 @@ void main() {
     }
 
     // You can load the transaction data with sdk.transactions
-    TransactionResponse transaction = await sdk.transactions.transaction(response.hash!);
+    TransactionResponse transaction =
+        await sdk.transactions.transaction(response.hash!);
 
     // Same for the inner transaction.
-    transaction = await sdk.transactions.transaction(transaction.innerTransaction!.hash);
+    transaction =
+        await sdk.transactions.transaction(transaction.innerTransaction!.hash);
   });
 
-  test('send native payment - muxed source and muxed destination account', () async {
+  test('send native payment - muxed source and muxed destination account',
+      () async {
     // Create two random key pairs, we will need them later for signing.
     KeyPair senderKeyPair = KeyPair.random();
     KeyPair receiverKeyPair = KeyPair.random();
@@ -1385,7 +1489,8 @@ void main() {
     transaction.sign(senderKeyPair, Network.TESTNET);
 
     // Submit.
-    SubmitTransactionResponse response = await sdk.submitTransaction(transaction);
+    SubmitTransactionResponse response =
+        await sdk.submitTransaction(transaction);
 
     // Now let's create the mxued accounts to be used in the payment transaction.
     MuxedAccount muxedDestinationAccount = MuxedAccount(accountCId, 8298298319);
@@ -1394,15 +1499,17 @@ void main() {
     // Build the payment operation.
     // We use the muxed account objects for destination and for source here.
     // This is not needed, you can also use only a muxed source account or muxed destination account.
-    PaymentOperation paymentOperation = PaymentOperationBuilder.forMuxedDestinationAccount(
-            muxedDestinationAccount, Asset.NATIVE, "100")
-        .setMuxedSourceAccount(muxedSourceAccount)
-        .build();
+    PaymentOperation paymentOperation =
+        PaymentOperationBuilder.forMuxedDestinationAccount(
+                muxedDestinationAccount, Asset.NATIVE, "100")
+            .setMuxedSourceAccount(muxedSourceAccount)
+            .build();
 
     // Build the transaction.
     // If we want to use a Med25519 muxed account with id as a source of the transaction, we can just set the id in our account object.
     accountA.muxedAccountMed25519Id = 44498494844;
-    transaction = TransactionBuilder(accountA).addOperation(paymentOperation).build();
+    transaction =
+        TransactionBuilder(accountA).addOperation(paymentOperation).build();
 
     // Sign.
     transaction.sign(senderKeyPair, Network.TESTNET);
@@ -1430,14 +1537,16 @@ void main() {
     List<Currency?>? currencies = stellarToml.currencies;
     for (Currency? currency in currencies!) {
       if (currency!.toml != null) {
-        Currency linkedCurrency = await StellarToml.currencyFromUrl(currency.toml!);
+        Currency linkedCurrency =
+            await StellarToml.currencyFromUrl(currency.toml!);
         print(linkedCurrency.code);
       }
     }
   });
 
   test('sep 0002 - federation - resolve address', () async {
-    FederationResponse response = await Federation.resolveStellarAddress("bob*soneso.com");
+    FederationResponse response =
+        await Federation.resolveStellarAddress("bob*soneso.com");
     print(response.stellarAddress);
     print(response.accountId);
     print(response.memoType);
@@ -1451,10 +1560,12 @@ void main() {
     mnemonic = await Wallet.generate24WordsMnemonic();
     print(mnemonic);
 
-    String frenchMnemonic = await Wallet.generate12WordsMnemonic(language: LANGUAGE_FRENCH);
+    String frenchMnemonic =
+        await Wallet.generate12WordsMnemonic(language: LANGUAGE_FRENCH);
     print(frenchMnemonic);
 
-    String koreanMnemonic = await Wallet.generate24WordsMnemonic(language: LANGUAGE_KOREAN);
+    String koreanMnemonic =
+        await Wallet.generate24WordsMnemonic(language: LANGUAGE_KOREAN);
     print(koreanMnemonic);
 
     Wallet wallet = await Wallet.from(

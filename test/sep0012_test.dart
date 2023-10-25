@@ -1,6 +1,6 @@
 @Timeout(const Duration(seconds: 400))
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'dart:convert';
@@ -64,13 +64,15 @@ void main() {
     request.account = accountId;
     request.jwt = jwtToken;
 
-    GetCustomerInfoResponse infoResponse = await kycService.getCustomerInfo(request);
+    GetCustomerInfoResponse infoResponse =
+        await kycService.getCustomerInfo(request);
 
     assert(infoResponse.id == customerId);
     assert(infoResponse.status == "ACCEPTED");
     assert(infoResponse.providedFields != null);
 
-    Map<String, GetCustomerInfoProvidedField?>? providedFields = infoResponse.providedFields;
+    Map<String, GetCustomerInfoProvidedField?>? providedFields =
+        infoResponse.providedFields;
     assert(providedFields!.length == 3);
 
     GetCustomerInfoProvidedField? firstName = providedFields!["first_name"];
@@ -85,7 +87,8 @@ void main() {
     assert(lastName!.type == "string");
     assert(lastName!.status == "ACCEPTED");
 
-    GetCustomerInfoProvidedField? emailAddress = providedFields["email_address"];
+    GetCustomerInfoProvidedField? emailAddress =
+        providedFields["email_address"];
     assert(emailAddress != null);
     assert(emailAddress!.description == "The customer's email address");
     assert(emailAddress!.type == "string");
@@ -112,7 +115,8 @@ void main() {
     request.account = accountId;
     request.jwt = jwtToken;
 
-    GetCustomerInfoResponse infoResponse = await kycService.getCustomerInfo(request);
+    GetCustomerInfoResponse infoResponse =
+        await kycService.getCustomerInfo(request);
 
     assert(infoResponse.id == customerId);
     assert(infoResponse.status == "NEEDS_INFO");
@@ -134,7 +138,8 @@ void main() {
 
     assert(infoResponse.providedFields != null);
 
-    Map<String, GetCustomerInfoProvidedField?>? providedFields = infoResponse.providedFields;
+    Map<String, GetCustomerInfoProvidedField?>? providedFields =
+        infoResponse.providedFields;
     assert(providedFields!.length == 2);
 
     GetCustomerInfoProvidedField? firstName = providedFields!["first_name"];
@@ -171,7 +176,8 @@ void main() {
     request.account = accountId;
     request.jwt = jwtToken;
 
-    GetCustomerInfoResponse? infoResponse = await kycService.getCustomerInfo(request);
+    GetCustomerInfoResponse? infoResponse =
+        await kycService.getCustomerInfo(request);
 
     assert(infoResponse.status == "NEEDS_INFO");
     assert(infoResponse.fields != null);
@@ -198,7 +204,8 @@ void main() {
 
     GetCustomerInfoField? photoIdFront = fields["photo_id_front"];
     assert(photoIdFront != null);
-    assert(photoIdFront!.description == "A clear photo of the front of the government issued ID");
+    assert(photoIdFront!.description ==
+        "A clear photo of the front of the government issued ID");
     assert(photoIdFront!.type == "binary");
   });
 
@@ -222,7 +229,8 @@ void main() {
     request.account = accountId;
     request.jwt = jwtToken;
 
-    GetCustomerInfoResponse? infoResponse = await kycService.getCustomerInfo(request);
+    GetCustomerInfoResponse? infoResponse =
+        await kycService.getCustomerInfo(request);
 
     assert(infoResponse.id == customerId);
     assert(infoResponse.status == "PROCESSING");
@@ -230,12 +238,15 @@ void main() {
         "Photo ID requires manual review. This process typically takes 1-2 business days.");
     assert(infoResponse.providedFields != null);
 
-    Map<String, GetCustomerInfoProvidedField?>? providedFields = infoResponse.providedFields;
+    Map<String, GetCustomerInfoProvidedField?>? providedFields =
+        infoResponse.providedFields;
     assert(providedFields!.length == 1);
 
-    GetCustomerInfoProvidedField? photoIdFront = providedFields!["photo_id_front"];
+    GetCustomerInfoProvidedField? photoIdFront =
+        providedFields!["photo_id_front"];
     assert(photoIdFront != null);
-    assert(photoIdFront!.description == "A clear photo of the front of the government issued ID");
+    assert(photoIdFront!.description ==
+        "A clear photo of the front of the government issued ID");
     assert(photoIdFront!.type == "binary");
     assert(photoIdFront!.status == "PROCESSING");
   });
@@ -260,7 +271,8 @@ void main() {
     request.account = accountId;
     request.jwt = jwtToken;
 
-    GetCustomerInfoResponse? infoResponse = await kycService.getCustomerInfo(request);
+    GetCustomerInfoResponse? infoResponse =
+        await kycService.getCustomerInfo(request);
 
     assert(infoResponse.id == customerId);
     assert(infoResponse.status == "REJECTED");
@@ -287,13 +299,15 @@ void main() {
     request.account = accountId;
     request.jwt = jwtToken;
 
-    GetCustomerInfoResponse? infoResponse = await kycService.getCustomerInfo(request);
+    GetCustomerInfoResponse? infoResponse =
+        await kycService.getCustomerInfo(request);
 
     assert(infoResponse.id == customerId);
     assert(infoResponse.status == "NEEDS_INFO");
     assert(infoResponse.providedFields != null);
 
-    Map<String, GetCustomerInfoProvidedField?>? providedFields = infoResponse.providedFields;
+    Map<String, GetCustomerInfoProvidedField?>? providedFields =
+        infoResponse.providedFields;
     assert(providedFields!.length == 1);
 
     GetCustomerInfoProvidedField? mobileNr = providedFields!["mobile_number"];
@@ -325,7 +339,8 @@ void main() {
     request.account = accountId;
     request.jwt = jwtToken;
 
-    PutCustomerInfoResponse? infoResponse = await kycService.putCustomerInfo(request);
+    PutCustomerInfoResponse? infoResponse =
+        await kycService.putCustomerInfo(request);
 
     assert(infoResponse.id == customerId);
   });
@@ -347,7 +362,8 @@ void main() {
       return http.Response(json.encode(mapJson), 400);
     });
 
-    PutCustomerVerificationRequest request = new PutCustomerVerificationRequest();
+    PutCustomerVerificationRequest request =
+        new PutCustomerVerificationRequest();
     request.id = customerId;
     Map<String, String> fields = {};
     fields["id"] = customerId;
@@ -355,13 +371,15 @@ void main() {
     request.verificationFields = fields;
     request.jwt = jwtToken;
 
-    GetCustomerInfoResponse? infoResponse = await kycService.putCustomerVerification(request);
+    GetCustomerInfoResponse? infoResponse =
+        await kycService.putCustomerVerification(request);
 
     assert(infoResponse.id == customerId);
     assert(infoResponse.status == "ACCEPTED");
     assert(infoResponse.providedFields != null);
 
-    Map<String, GetCustomerInfoProvidedField?>? providedFields = infoResponse.providedFields;
+    Map<String, GetCustomerInfoProvidedField?>? providedFields =
+        infoResponse.providedFields;
     assert(providedFields!.length == 1);
 
     GetCustomerInfoProvidedField? mobileNr = providedFields!["mobile_number"];
@@ -388,8 +406,8 @@ void main() {
       return http.Response(json.encode(mapJson), 400);
     });
 
-    http.Response? response =
-        await kycService.deleteCustomer(accountId, "memo test", "text", jwtToken);
+    http.Response? response = await kycService.deleteCustomer(
+        accountId, "memo test", "text", jwtToken);
 
     assert(response.statusCode == 200);
   });

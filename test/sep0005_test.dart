@@ -1,7 +1,7 @@
 @Timeout(const Duration(seconds: 400))
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 void main() {
   test('Key Derivation Methods for Stellar Keys', () async {
@@ -47,7 +47,7 @@ void main() {
     assert(mnemonic12WordsSpanish.split(" ").length == 12);
 
     String mnemonic12WordsMalay =
-    await Wallet.generate12WordsMnemonic(language: LANGUAGE_MALAY);
+        await Wallet.generate12WordsMnemonic(language: LANGUAGE_MALAY);
     print(mnemonic12WordsMalay);
     assert(mnemonic12WordsMalay.split(" ").length == 12);
 
@@ -55,8 +55,8 @@ void main() {
         await Wallet.generate12WordsMnemonic(language: LANGUAGE_ENGLISH);
     print(mnemonic12WordsEnglish);
     assert(mnemonic12WordsEnglish.split(" ").length == 12);
-	
-	String mnemonic18Words = await Wallet.generate18WordsMnemonic();
+
+    String mnemonic18Words = await Wallet.generate18WordsMnemonic();
     print(mnemonic18Words);
     assert(mnemonic18Words.split(" ").length == 18);
 
@@ -98,7 +98,7 @@ void main() {
     assert(mnemonic18WordsSpanish.split(" ").length == 18);
 
     String mnemonic18WordsMalay =
-    await Wallet.generate18WordsMnemonic(language: LANGUAGE_MALAY);
+        await Wallet.generate18WordsMnemonic(language: LANGUAGE_MALAY);
     print(mnemonic18WordsMalay);
     assert(mnemonic18WordsMalay.split(" ").length == 18);
 
@@ -149,7 +149,7 @@ void main() {
     assert(mnemonic24WordsSpanish.split(" ").length == 24);
 
     String mnemonic24WordsMalay =
-    await Wallet.generate24WordsMnemonic(language: LANGUAGE_MALAY);
+        await Wallet.generate24WordsMnemonic(language: LANGUAGE_MALAY);
     print(mnemonic24WordsMalay);
     assert(mnemonic24WordsMalay.split(" ").length == 24);
 
@@ -278,8 +278,8 @@ void main() {
         "GAVXVW5MCK7Q66RIBWZZKZEDQTRXWCZUP4DIIFXCCENGW2P6W4OA34RH");
     assert(keyPair.secretSeed ==
         "SAKS7I2PNDBE5SJSUSU2XLJ7K5XJ3V3K4UDFAHMSBQYPOKE247VHAGDB");
-    
-	wallet = await Wallet.from(
+
+    wallet = await Wallet.from(
         "cheap math piece okay jar quote chest repair own toilet denial loyal world remind potato cushion bargain paddle");
     assert(await wallet.getAccountId(index: 0) ==
         "GC7YQKL2P2JFZTTFTYW6XKCBJ7QTH4S3Q5AEVWWA6RIZ7MMER5NNINPL");
@@ -333,7 +333,7 @@ void main() {
         "GBOLXUO4DR76UUHLNWENTHU6L5L5YMPR22CCXXJMNBXXN3FM42LVFYEY");
     assert(keyPair.secretSeed ==
         "SB57GY6A6KO76CJDXYXELENJOJATVNYVUAJDIHCRVDMWY6DUUTZEOAMZ");
-	
+
     wallet = await Wallet.from(
         "bench hurt jump file august wise shallow faculty impulse spring exact slush thunder author capable act festival slice deposit sauce coconut afford frown better");
     assert(await wallet.getAccountId(index: 0) ==

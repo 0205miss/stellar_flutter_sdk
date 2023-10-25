@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
+import 'package:pi_flutter_sdk/pi_flutter_sdk.dart';
 
 import 'xdr_operation_result_extensions.dart';
 

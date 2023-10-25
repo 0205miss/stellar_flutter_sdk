@@ -5,8 +5,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart' as dio;
-import 'package:stellar_flutter_sdk/src/responses/response.dart';
-import 'package:stellar_flutter_sdk/src/xdr/xdr_type.dart';
+import 'package:pi_flutter_sdk/src/responses/response.dart';
+import 'package:pi_flutter_sdk/src/xdr/xdr_type.dart';
 import 'soroban_auth.dart';
 import '../xdr/xdr_data_entry.dart';
 import '../xdr/xdr_ledger.dart';
@@ -37,7 +37,6 @@ class SorobanServer {
   /// General node health check request.
   /// See: https://soroban.stellar.org/api/methods/getHealth
   Future<GetHealthResponse> getHealth() async {
-
     JsonRpcMethod getHealth = JsonRpcMethod("getHealth");
     dio.Response response = await _dio.post(_serverUrl,
         data: json.encode(getHealth), options: dio.Options(headers: _headers));
@@ -50,7 +49,6 @@ class SorobanServer {
   /// For finding out the current latest known ledger.
   /// See: https://soroban.stellar.org/api/methods/getLatestLedger
   Future<GetLatestLedgerResponse> getLatestLedger() async {
-
     JsonRpcMethod getLatestLedger = JsonRpcMethod("getLatestLedger");
     dio.Response response = await _dio.post(_serverUrl,
         data: json.encode(getLatestLedger),
@@ -69,7 +67,6 @@ class SorobanServer {
   /// To fetch contract wasm byte-code, use the ContractCode ledger entry key.
   /// See: https://soroban.stellar.org/api/methods/getLedgerEntry
   Future<GetLedgerEntryResponse> getLedgerEntry(String base64EncodedKey) async {
-
     JsonRpcMethod getLedgerEntry =
         JsonRpcMethod("getLedgerEntry", args: {'key': base64EncodedKey});
     dio.Response response = await _dio.post(_serverUrl,
@@ -84,8 +81,8 @@ class SorobanServer {
   /// Loads the contract source code (including source code - wasm bytes) for a given wasm id.
   Future<XdrContractCodeEntry?> loadContractCodeForWasmId(String wasmId) async {
     XdrLedgerKey ledgerKey = XdrLedgerKey(XdrLedgerEntryType.CONTRACT_CODE);
-    ledgerKey.contractCode = XdrLedgerKeyContractCode(
-        XdrHash(Util.hexToBytes(wasmId)));
+    ledgerKey.contractCode =
+        XdrLedgerKeyContractCode(XdrHash(Util.hexToBytes(wasmId)));
     GetLedgerEntryResponse ledgerEntryResponse =
         await getLedgerEntry(ledgerKey.toBase64EncodedXdrString());
     if (ledgerEntryResponse.ledgerEntryData != null) {
@@ -113,8 +110,7 @@ class SorobanServer {
           XdrLedgerEntryData.fromBase64EncodedXdrString(
               ledgerEntryResponse.ledgerEntryData!);
       if (ledgerEntryData.contractData != null &&
-          ledgerEntryData
-                  .contractData?.val.instance?.executable.wasmHash !=
+          ledgerEntryData.contractData?.val.instance?.executable.wasmHash !=
               null) {
         String wasmId = Util.bytesToHex(ledgerEntryData
             .contractData!.val.instance!.executable.wasmHash!.hash);
@@ -127,7 +123,6 @@ class SorobanServer {
   /// General info about the currently configured network.
   /// See: https://soroban.stellar.org/api/methods/getNetwork
   Future<GetNetworkResponse> getNetwork() async {
-
     JsonRpcMethod getNetwork = JsonRpcMethod("getNetwork");
     dio.Response response = await _dio.post(_serverUrl,
         data: json.encode(getNetwork), options: dio.Options(headers: _headers));
@@ -142,7 +137,6 @@ class SorobanServer {
   /// See: https://soroban.stellar.org/api/methods/simulateTransaction
   Future<SimulateTransactionResponse> simulateTransaction(
       Transaction transaction) async {
-
     String transactionEnvelopeXdr = transaction.toEnvelopeXdrBase64();
 
     JsonRpcMethod getAccount =
@@ -165,7 +159,6 @@ class SorobanServer {
   /// See: https://soroban.stellar.org/api/methods/sendTransaction
   Future<SendTransactionResponse> sendTransaction(
       Transaction transaction) async {
-
     String transactionEnvelopeXdr = transaction.toEnvelopeXdrBase64();
 
     JsonRpcMethod getAccount =
@@ -181,7 +174,6 @@ class SorobanServer {
   /// Clients will poll this to tell when the transaction has been completed.
   /// See: https://soroban.stellar.org/api/methods/getTransaction
   Future<GetTransactionResponse> getTransaction(String transactionHash) async {
-
     JsonRpcMethod getTransactionStatus =
         JsonRpcMethod("getTransaction", args: transactionHash);
     dio.Response response = await _dio.post(_serverUrl,
@@ -202,7 +194,6 @@ class SorobanServer {
   /// By default soroban-rpc retains the most recent 24 hours of events.
   /// See: https://soroban.stellar.org/api/methods/getEvents
   Future<GetEventsResponse> getEvents(GetEventsRequest request) async {
-
     JsonRpcMethod getEvents =
         JsonRpcMethod("getEvents", args: request.getRequestArgs());
     dio.Response response = await _dio.post(_serverUrl,
@@ -356,25 +347,22 @@ class GetNetworkResponse extends SorobanRpcResponse {
 /// The minResourceFee and transactionData fields should be used to construct the transaction
 /// containing the RestoreFootprint operation.
 class RestorePreamble {
-
   /// The recommended Soroban Transaction Data to use when submitting the RestoreFootprint operation.
   XdrSorobanTransactionData transactionData;
 
   ///  Recommended minimum resource fee to add when submitting the RestoreFootprint operation. This fee is to be added on top of the Stellar network fee.
   int minResourceFee;
 
-
   RestorePreamble(this.transactionData, this.minResourceFee);
 
   factory RestorePreamble.fromJson(Map<String, dynamic> json) {
-
-    XdrSorobanTransactionData transactionData = XdrSorobanTransactionData.fromBase64EncodedXdrString(
-        json['transactionData']);
+    XdrSorobanTransactionData transactionData =
+        XdrSorobanTransactionData.fromBase64EncodedXdrString(
+            json['transactionData']);
 
     int minResourceFee = convertInt(json['minResourceFee'])!;
     return RestorePreamble(transactionData, minResourceFee);
   }
-
 }
 
 /// Response that will be received when submitting a trial contract invocation.
@@ -441,7 +429,8 @@ class SimulateTransactionResponse extends SorobanRpcResponse {
       }
 
       if (json['restorePreamble'] != null) {
-        response.restorePreamble = RestorePreamble.fromJson(json['restorePreamble']);
+        response.restorePreamble =
+            RestorePreamble.fromJson(json['restorePreamble']);
       }
 
       response.minResourceFee = convertInt(json['result']['minResourceFee']);
